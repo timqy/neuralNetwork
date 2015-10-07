@@ -1,2 +1,0 @@
-# neuralNetwork
-Laboration 2
