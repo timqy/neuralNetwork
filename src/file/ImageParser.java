@@ -30,7 +30,7 @@ public class ImageParser {
      * @throws IOException
      * @throws NumberFormatException
      */
-    public ArrayList<FaceFile> parseImage(String filePath) throws IOException, NumberFormatException{
+    public ArrayList<FaceFile> parseImage(String filePath) throws IOException, NumberFormatException, FileNotFoundException {
         ArrayList<FaceFile> imgArr = new ArrayList<FaceFile>();
         FaceFile faceFile = new FaceFile();
         int lineNumber = 0;
@@ -69,7 +69,7 @@ public class ImageParser {
      * @param filepath filepath to the facit file.
      * @return An hashmap.
      */
-    public HashMap<String, Integer> parseFacit(String filepath) throws IOException {
+    public HashMap<String, Integer> parseFacit(String filepath) throws IOException, FileNotFoundException {
         HashMap<String, Integer> facitMap = new HashMap<String, Integer>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
 
