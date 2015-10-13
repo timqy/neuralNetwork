@@ -36,8 +36,7 @@ public class ImageHandler {
             int xLow = ((divided%2) * matrixValue);
             int yHigh = (int) (matrixValue * (Math.floor(divided/2) + 1));
             int yLow = (int) (Math.floor(divided/2) * matrixValue);
-            System.out.println( xLow + " < nodeX < " + xHigh  );
-            System.out.println( yLow + " < nodeY < " + yHigh  );
+
             for (Node node : imgMatrix) {
                 if (node.getX() < xHigh && xLow <= node.getX()
                         && node.getY() < yHigh && yLow <= node.getY() ) {
@@ -51,16 +50,13 @@ public class ImageHandler {
     }
 
     private void RotateImage(ArrayList<Node> imgMatrix, int value[]) {
-        System.out.println("Value " + Arrays.toString(value));
         int matrixValue = (imgMatrix.size() / 10)/2;
         switch(getIndexGreatestValue(value)){
             case 0:
-                System.out.println(" Should NOT rotate");
-
+                /** Should not rotate */
                 break;
             case 1:
-                /**  bla bla */
-                System.out.println("1  Rotated 240 degrees");
+                /**  Should be rotated 240 degrees */
                 for(int i = 0; i < 3; i++)
                     for(Node node : imgMatrix){
                         int x = node.getX();
@@ -70,16 +66,23 @@ public class ImageHandler {
                     }
                 break;
             case 2:
-                System.out.println(" 2 Should rotate 90 degrees");
+                /**  Should be rotated 90 degrees */
                 for(Node node : imgMatrix){
                     int x = node.getX();
                     int Y = node.getY();
                     node.setX(matrixValue - node.getY() - 1);
                     node.setY(x);
                 }
+
+                /** reverse each row */
+                for(Node node : imgMatrix){
+                    int x = node.getX();
+                    node.setX(matrixValue - x - 1);
+                }
+
                 break;
             case 3:
-                System.out.println(" 3 should rotate 180 degrees");
+                /**  Should be rotated 180 degrees */
                 for(int i = 0; i < 2; i++)
                     for(Node node : imgMatrix){
                         int x = node.getX();
@@ -87,10 +90,15 @@ public class ImageHandler {
                         node.setX(matrixValue - node.getY() - 1);
                         node.setY(x);
                     }
+
+                /** reverse each row */
+                for(Node node : imgMatrix){
+                    int x = node.getX();
+                    node.setX(matrixValue - x - 1);
+                }
                 break;
         }
     }
-
 
     private static int getIndexGreatestValue(int value[]){
         int max = 0;

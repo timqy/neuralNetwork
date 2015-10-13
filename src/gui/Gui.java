@@ -52,6 +52,8 @@ public class Gui {
                         g.setColor(Color.black);
                     } else if (n.getValue() > 10) {
                         g.setColor(Color.darkGray);
+                    } else if (n.getValue() > 8) {
+                        g.setColor(Color.green);
                     } else {
                         g.setColor(Color.WHITE);
                     }
