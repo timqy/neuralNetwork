@@ -1,6 +1,7 @@
 package main;
 
 import file.FaceFile;
+import file.ImageHandler;
 import file.ImageParser;
 import gui.Gui;
 
@@ -19,7 +20,8 @@ public class Perceptron {
         try {
             imgMatris = parser.parseImage(args[0]);
             System.out.println("Image matris is length :" + imgMatris.size());
-
+            ImageHandler ih = new ImageHandler();
+            ih.RotateImageAnalyzer(imgMatris.get(0).getNodeArr());
             Gui gui = new Gui(imgMatris);
             gui.setVisible();
         } catch (IOException e) {

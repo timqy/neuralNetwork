@@ -48,5 +48,4 @@ public class ImageParser {
     public static ImageParser getInstance() {
         return instance;
     }
-
 }

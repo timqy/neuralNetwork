@@ -43,7 +43,7 @@ public class Gui {
             public void paint(Graphics g) {
                 g.setColor(Color.WHITE);
                 g.fillRect(0, 0, WIDTH, HEIGHT);
-                FaceFile f = imgMatris.get(2);
+                FaceFile f = imgMatris.get(0);
 
                 for (Node n: f.getNodeArr()) {
                     if (n.getValue() > 20) {
@@ -55,9 +55,6 @@ public class Gui {
                     }
                     g.fillRect(n.getX() * 10, n.getY() * 10, 1 * 10, 1 * 10);
                 }
-
-
-
             }
         };
         canvas.setBackground(Color.WHITE);
