@@ -15,15 +15,16 @@ public class Gui {
     private final JFrame windowFrame;
     private final ArrayList<FaceFile> imgMatris;
     private Canvas canvas;
+    private int imgIndex;
 
-    public Gui(ArrayList<FaceFile> imgMatris) {
+    public Gui(ArrayList<FaceFile> imgMatris, int imgIndex) {
         this.imgMatris = imgMatris;
+        this.imgIndex = imgIndex;
         windowFrame = new JFrame();
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.setSize(1280, 960);
         windowFrame.setFocusable(true);
         windowFrame.requestFocusInWindow();
-
         windowFrame.add(buildCanvas());
     }
 
@@ -43,7 +44,8 @@ public class Gui {
             public void paint(Graphics g) {
                 g.setColor(Color.WHITE);
                 g.fillRect(0, 0, WIDTH, HEIGHT);
-                FaceFile f = imgMatris.get(0);
+
+                FaceFile f = imgMatris.get(imgIndex);
 
                 for (Node n: f.getNodeArr()) {
                     if (n.getValue() > 20) {
@@ -68,4 +70,5 @@ public class Gui {
     public void setVisible() {
         windowFrame.setVisible(true);
     }
+
 }

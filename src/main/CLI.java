@@ -3,6 +3,7 @@ package main;
 import file.FaceFile;
 import file.ImageHandler;
 import file.ImageParser;
+import gui.Gui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,7 +31,8 @@ public class CLI {
     private Scanner scanner;
 
     /**
-     * Constructs a new CLI
+     * Constructs a new CLI. Setups the hashmaps and the arraylists.
+     * It also gets an instance of the Imageparser as well as a new scanner from System.in
      */
     public CLI() {
         facitMap = new HashMap<>();
@@ -56,12 +58,16 @@ public class CLI {
             String[] argv = userInput.split(" ");
 
             if (argv[0].equals("help")) {
+
                 printHelp();
+
             } else if(argv[0].equals("loadfacit")) {
+
                 if(argv.length == 2)
                     loadfacit(argv[1]);
                 else
                     loadfacit();
+
             } else if(argv[0].equals("loadimages")) {
 
                 if (argv.length == 2)
@@ -71,10 +77,29 @@ public class CLI {
 
             } else if(argv[0].equals("status")) {
                 status();
+
+            } else if (argv[0].equals("showimg")) {
+                if(argv.length == 2) {
+                    try {
+                        showImage(Integer.parseInt(argv[2]));
+                    }catch (NumberFormatException ex) {
+                        System.err.println("Error: Second argument needs to be a number.");
+                    }
+                }
             } else {
                 System.err.println("Unknown command.");
             }
         }
+    }
+
+    /**
+     *
+     * @param imgIndex
+     */
+    private void showImage(int imgIndex) {
+        Gui g = new Gui(nodeList, imgIndex);
+        g.setVisible();
+
     }
 
     /**
