@@ -87,6 +87,7 @@ public class CLI {
                     }
                 }
             } else {
+                //HELLO
                 System.err.println("Unknown command.");
             }
         }
