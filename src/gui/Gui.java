@@ -21,7 +21,7 @@ public class Gui {
         this.imgMatris = imgMatris;
         this.imgIndex = imgIndex;
         windowFrame = new JFrame();
-        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        windowFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         windowFrame.setSize(1280, 960);
         windowFrame.setFocusable(true);
         windowFrame.requestFocusInWindow();

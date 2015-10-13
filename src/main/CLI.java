@@ -81,7 +81,7 @@ public class CLI {
             } else if (argv[0].equals("showimg")) {
                 if(argv.length == 2) {
                     try {
-                        showImage(Integer.parseInt(argv[2]));
+                        showImage(Integer.parseInt(argv[1]));
                     }catch (NumberFormatException ex) {
                         System.err.println("Error: Second argument needs to be a number.");
                     }
@@ -97,6 +97,9 @@ public class CLI {
      * @param imgIndex
      */
     private void showImage(int imgIndex) {
+
+        imageHandler.RotateImageAnalyzer(nodeList.get(imgIndex).getNodeArr());
+
         Gui g = new Gui(nodeList, imgIndex);
         g.setVisible();
 
@@ -139,9 +142,7 @@ public class CLI {
             e.printStackTrace();
         }
 
-        for(FaceFile face : nodeList){
-            imageHandler.RotateImageAnalyzer(face.getNodeArr());
-        }
+
 
         System.out.println("Loaded faceit path, "+facitMap.size() +" entities loaded!");
     }
@@ -159,9 +160,9 @@ public class CLI {
             e.printStackTrace();
         }
 
-        for(FaceFile face : nodeList){
-            imageHandler.RotateImageAnalyzer(face.getNodeArr());
-        }
+        //for(FaceFile face : nodeList){
+          //  imageHandler.RotateImageAnalyzer(face.getNodeArr());
+        //}
 
         System.out.println("Loaded default images path, "+nodeList.size() +" entities loaded!");
 
