@@ -6,14 +6,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by dv13thg on 10/7/15.
+ * @author dv13lan, dv13thg
+ * @version 2015-10-13
+ *
+ * This class handles the parsing of the image and facit files.
+ * It is implemented using the singleton design pattern since we only need
+ * one instance of this class.
  */
 public class ImageParser {
 
+    // Access outside this object by this field.
     private static ImageParser instance = new ImageParser();
 
+    /**
+     * private empty constructor as standard for singleton classes in java.
+     */
     private ImageParser() { }
 
+    /**
+     * Parses the imagefiles, will ignore # signs as they are seens as comments.
+     * @param filePath Path to the file containing the faceit images.
+     * @return An arraylist containing faceit files.
+     * @throws IOException
+     * @throws NumberFormatException
+     */
     public ArrayList<FaceFile> parseImage(String filePath) throws IOException, NumberFormatException{
         ArrayList<FaceFile> imgArr = new ArrayList<FaceFile>();
         FaceFile faceFile = new FaceFile();
@@ -73,6 +89,10 @@ public class ImageParser {
         return facitMap;
     }
 
+    /**
+     * Used by other classes and objects to get an instance of this parser.
+     * @return An imageparser.
+     */
     public static ImageParser getInstance() {
         return instance;
     }

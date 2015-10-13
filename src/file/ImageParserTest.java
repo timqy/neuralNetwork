@@ -8,10 +8,15 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests the image parser
+ * @author dv13lan
+ */
 public class ImageParserTest {
 
 
     private ImageParser parser;
+
     @Before
     public void setUp() throws Exception {
         parser = ImageParser.getInstance();
