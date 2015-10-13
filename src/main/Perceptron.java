@@ -5,8 +5,10 @@ import file.ImageHandler;
 import file.ImageParser;
 import gui.Gui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by dv13thg on 10/7/15.
@@ -20,8 +22,6 @@ public class Perceptron {
         try {
             imgMatris = parser.parseImage(args[0]);
             System.out.println("Image matris is length :" + imgMatris.size());
-            ImageHandler ih = new ImageHandler();
-            ih.RotateImageAnalyzer(imgMatris.get(0).getNodeArr());
             Gui gui = new Gui(imgMatris);
             gui.setVisible();
         } catch (IOException e) {
@@ -31,8 +31,10 @@ public class Perceptron {
             System.err.println("Image is wrong format or corrupted");
         }
 
+        CLI cli;
 
+        cli = new CLI();
 
-
+        cli.run();
     }
 }
