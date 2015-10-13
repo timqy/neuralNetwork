@@ -70,7 +70,16 @@ public class ImageHandler {
                     }
                 break;
             case 2:
-                System.out.println(" 2 Should rotate 180 degrees");
+                System.out.println(" 2 Should rotate 90 degrees");
+                for(Node node : imgMatrix){
+                    int x = node.getX();
+                    int Y = node.getY();
+                    node.setX(matrixValue - node.getY() - 1);
+                    node.setY(x);
+                }
+                break;
+            case 3:
+                System.out.println(" 3 should rotate 180 degrees");
                 for(int i = 0; i < 2; i++)
                     for(Node node : imgMatrix){
                         int x = node.getX();
@@ -78,15 +87,6 @@ public class ImageHandler {
                         node.setX(matrixValue - node.getY() - 1);
                         node.setY(x);
                     }
-                break;
-            case 3:
-                System.out.println(" 3 should rotate 90 degrees");
-                for(Node node : imgMatrix){
-                    int x = node.getX();
-                    int Y = node.getY();
-                    node.setX(matrixValue - node.getY() - 1);
-                    node.setY(x);
-                }
                 break;
         }
     }
