@@ -31,8 +31,9 @@ public class ImageHandler {
         int matrixValue = (imgMatrix.size() / 10) / 4;
         while (divided < 4) {
             ArrayList<Node> tempArr = new ArrayList<Node>();
-            int xHigh = matrixValue * (divided + 1);
-            int xLow = (divided * matrixValue);
+
+            int xHigh = matrixValue * ((divided%2) + 1);
+            int xLow = ((divided%2) * matrixValue);
             int yHigh = (int) (matrixValue * (Math.floor(divided/2) + 1));
             int yLow = (int) (Math.floor(divided/2) * matrixValue);
             System.out.println( xLow + " < nodeX < " + xHigh  );
