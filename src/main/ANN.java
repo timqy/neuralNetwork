@@ -32,6 +32,7 @@ public class ANN {
             // Loop over training data
             for (int i = 0; i < trainingData.length; i++) {
                 System.out.println("Starting weights: " + Arrays.toString(weights));
+
                 // Calculate weighted input
                 double weightedSum = 0;
                 for (int ii = 0; ii < trainingData[i][0].length; ii++) {

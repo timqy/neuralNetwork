@@ -18,6 +18,21 @@ public class NeuronNode {
     private HashMap<NeuronNode, Double> edges;
 
     /**
+     * Sets the value.
+     * @param value
+     */
+    public void setValue(int value) {
+        if(value > 20)
+            this.value = 1;
+        else
+            this.value = 0;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    /**
      * Constructs a new NeuronNode objects.
      * This constructor instantiates the lists and maps.
      */
@@ -44,8 +59,14 @@ public class NeuronNode {
      * @param neuronNode The neuron node which the edge leads to.
      * @param value The value between the edges.
      */
-    public void updateWeights(NeuronNode neuronNode, double value){
-        edges.put(neuronNode,value);
+    public void updateWeights(){
+        for(NeuronNode neuronNode : connections) {
+            if(this.value == 1 && neuronNode.getValue() == 1) {
+                edges.put(neuronNode,edges.get(neuronNode)+1);
+            } else if (this.value != neuronNode.getValue()){
+                edges.put(neuronNode,edges.get(neuronNode)-1);
+            }
+        }
     }
 
     /**
@@ -57,5 +78,7 @@ public class NeuronNode {
         }
     }
 
-
+    public double getWeightBetweenNodes(NeuronNode node) {
+        return edges.get(node);
+    }
 }

@@ -99,9 +99,10 @@ public class CLI {
     }
 
     private void startTraining(String[] argv) {
-        Trainer trainer = new Trainer(FileImages, facitMap);
-        trainer.start(1000);
-
+        if(argv.length == 2) {
+            Trainer trainer = new Trainer(FileImages, facitMap);
+            trainer.start(Integer.parseInt(argv[1]));
+        }
     }
 
     /**
