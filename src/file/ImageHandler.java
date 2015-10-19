@@ -11,11 +11,13 @@ import java.util.Random;
  */
 public class ImageHandler {
 
-    /** MatrixValue
+    /** MatrixSum
+     *  sums the value's in the matrix
+     *
      * @param imgMatrix the matrix to be analyzed
      * @return the value of the matrix
      */
-    private int matrixValue(ArrayList<Integer> imgMatrix){
+    private int matrixSum(ArrayList<Integer> imgMatrix){
         int sum = 0;
         for(int value : imgMatrix) {
 
@@ -25,6 +27,10 @@ public class ImageHandler {
         return sum;
     }
 
+    /**
+     * analyzes the image by converting the image into 
+     * four smaller ones, sums each image, calls rotate.
+     */
     public void RotateImageAnalyzer(int[][] imgMatrix) {
         int value[] = new int[4];
         int matrixValue = imgMatrix.length;
@@ -42,12 +48,22 @@ public class ImageHandler {
             for(int x = xLow; x < xHigh; x++)
                 for(int y = yLow; y < yHigh; y++)
                     tempArr.add(imgMatrix[x][y]);
-            value[divided] = matrixValue(tempArr);
+            
+            value[divided] = matrixSum(tempArr);
         }
-        RotateImage(imgMatrix,value);
+        /**rotate the image accordingly */
+        imgMatrix = RotateImage(imgMatrix,value);
     }
 
-    private void RotateImage(int[][] imgMatrix, int value[]) {
+
+    /** RotateImage
+     * Rotates the image according to what quadrant of the 
+     * image that has the highest value.
+     *
+     *
+     *
+     */
+    private int[][] RotateImage(int[][] imgMatrix, int value[]) {
         int matrixValue = imgMatrix.length;
         int[][] rotateImg = new int[matrixValue][matrixValue];
         int[][] temp;
@@ -88,6 +104,7 @@ public class ImageHandler {
                         rotateImg[matrixValue - x - 1][y] = temp[x][y];
                 break;
         }
+        return rotateImg;
     }
 
     private static int getIndexGreatestValue(int value[]){
