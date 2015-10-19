@@ -15,7 +15,7 @@ public class NeuronNode {
 
     private int value;
     private ArrayList<NeuronNode> connections;
-    private HashMap<NeuronNode, Integer> edges;
+    private HashMap<NeuronNode, Double> edges;
 
     /**
      * Constructs a new NeuronNode objects.
@@ -44,7 +44,7 @@ public class NeuronNode {
      * @param neuronNode The neuron node which the edge leads to.
      * @param value The value between the edges.
      */
-    public void updateWeights(NeuronNode neuronNode, int value){
+    public void updateWeights(NeuronNode neuronNode, double value){
         edges.put(neuronNode,value);
     }
 
@@ -53,7 +53,7 @@ public class NeuronNode {
      */
     private void createWeightedEdges() {
         for(NeuronNode neuronNode : connections) {
-            edges.put(neuronNode, 0);
+            edges.put(neuronNode, 0.0);
         }
     }
 

@@ -100,7 +100,7 @@ public class CLI {
 
     private void startTraining(String[] argv) {
         Trainer trainer = new Trainer(FileImages, facitMap);
-        trainer.start();
+        trainer.start(1000);
 
     }
 

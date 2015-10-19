@@ -48,13 +48,13 @@ public class Trainer {
         }
     }
 
-    public void start() {
+    public void start(int noOfLoops) {
         for (FileImage img : imgList) {
-            runTraining(img, facitFiles.get(img.getName()));
+            runTraining(img, facitFiles.get(img.getName()), noOfLoops);
         }
     }
 
-    private void runTraining(FileImage img, Integer correctResult) {
+    private void runTraining(FileImage img, int result, int correctResult) {
 
     }
 }
