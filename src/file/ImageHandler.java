@@ -26,22 +26,23 @@ public class ImageHandler {
     }
 
     public void RotateImageAnalyzer(int[][] imgMatrix) {
-        int divided = 0;
         int value[] = new int[4];
         int matrixValue = imgMatrix.length;
-        while (divided < 4) {
+        
+        for(int divided = 0; divided < 4; divided++; 
             ArrayList<Integer> tempArr = new ArrayList<>();
 
-            int xHigh = matrixValue * ((divided%2));
+            /** X low,high */
+            int xHigh = matrixValue * ((divided%2)i+1);
             int xLow = ((divided%2) * matrixValue);
-            int yHigh = (int) (matrixValue * (Math.floor(divided/2)));
+            /** Y low,high */
+            int yHigh = (int) (matrixValue * (Math.floor(divided/2)+1));
             int yLow = (int) (Math.floor(divided/2) * matrixValue);
 
             for(int x = xLow; x < xHigh; x++)
                 for(int y = yLow; y < yHigh; y++)
                     tempArr.add(imgMatrix[x][y]);
             value[divided] = matrixValue(tempArr);
-            divided++;
         }
         RotateImage(imgMatrix,value);
     }
