@@ -1,6 +1,7 @@
 package main;
 
-import file.FaceFile;
+import core.Trainer;
+import file.FileImage;
 import file.ImageHandler;
 import file.ImageParser;
 import gui.Gui;
@@ -24,7 +25,7 @@ public class CLI {
 
     private ImageParser parser;
     private HashMap<String, Integer> facitMap;
-    private ArrayList<FaceFile> nodeList;
+    private ArrayList<FileImage> FileImages;
     private ImageHandler imageHandler;
 
 
@@ -36,7 +37,7 @@ public class CLI {
      */
     public CLI() {
         facitMap = new HashMap<>();
-        nodeList = new ArrayList<>();
+        FileImages = new ArrayList<>();
         imageHandler = new ImageHandler();
 
         scanner = new Scanner(System.in);
@@ -86,11 +87,21 @@ public class CLI {
                         System.err.println("Error: Second argument needs to be a number.");
                     }
                 }
+            } else if(argv[0].equals("train")) {
+
+                startTraining(argv);
+
             } else {
                 //HELLO
                 System.err.println("Unknown command.");
             }
         }
+    }
+
+    private void startTraining(String[] argv) {
+        Trainer trainer = new Trainer(FileImages, facitMap);
+        trainer.start();
+
     }
 
     /**
@@ -99,9 +110,9 @@ public class CLI {
      */
     private void showImage(int imgIndex) {
 
-        imageHandler.RotateImageAnalyzer(nodeList.get(imgIndex).getNodeArr());
+        imageHandler.RotateImageAnalyzer(FileImages.get(imgIndex).getImgMatrix());
 
-        Gui g = new Gui(nodeList, imgIndex);
+        Gui g = new Gui(FileImages, imgIndex);
         g.setVisible();
 
     }
@@ -111,7 +122,7 @@ public class CLI {
      * how many noads that are loaded and how many answers that are loaded in.
      */
     private void status() {
-        System.out.println("There is "+nodeList.size() +" nodes loaded.");
+        System.out.println("There is "+ FileImages.size() +" nodes loaded.");
         System.out.println("There is "+facitMap.size() +" facit entries loaded");
     }
 
@@ -154,18 +165,18 @@ public class CLI {
     private void loadimages() {
 
         try {
-            nodeList = parser.parseImage(RESOURCES_TRAINING_TXT);
+            FileImages = parser.parseImage(RESOURCES_TRAINING_TXT);
         } catch (FileNotFoundException ff) {
             System.err.println("Could not load file "+RESOURCES_TRAINING_TXT);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //for(FaceFile face : nodeList){
-          //  imageHandler.RotateImageAnalyzer(face.getNodeArr());
+        //for(FileImage face : FileImages){
+          //  imageHandler.RotateImageAnalyzer(face.getImgMatrix());
         //}
 
-        System.out.println("Loaded default images path, "+nodeList.size() +" entities loaded!");
+        System.out.println("Loaded default FileImages path, "+ FileImages.size() +" entities loaded!");
 
     }
 
@@ -175,14 +186,14 @@ public class CLI {
      */
     private void loadimages(String filePath) {
         try {
-            nodeList = parser.parseImage(filePath);
+            FileImages = parser.parseImage(filePath);
         } catch (FileNotFoundException ff) {
             System.err.println("Could not load file "+filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded images path, "+nodeList.size() +" entities loaded!");
+        System.out.println("Loaded FileImages path, "+ FileImages.size() +" entities loaded!");
     }
 
 

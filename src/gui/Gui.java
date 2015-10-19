@@ -1,7 +1,6 @@
 package gui;
 
-import core.Node;
-import file.FaceFile;
+import file.FileImage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,16 +12,16 @@ import java.util.ArrayList;
 public class Gui {
 
     private final JFrame windowFrame;
-    private final ArrayList<FaceFile> imgMatris;
+    private final ArrayList<FileImage> imgMatris;
     private Canvas canvas;
     private int imgIndex;
 
-    public Gui(ArrayList<FaceFile> imgMatris, int imgIndex) {
+    public Gui(ArrayList<FileImage> imgMatris, int imgIndex) {
         this.imgMatris = imgMatris;
         this.imgIndex = imgIndex;
         windowFrame = new JFrame();
         windowFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        windowFrame.setSize(1280, 960);
+        windowFrame.setSize(640, 640);
         windowFrame.setFocusable(true);
         windowFrame.requestFocusInWindow();
         windowFrame.add(buildCanvas());
@@ -45,19 +44,21 @@ public class Gui {
                 g.setColor(Color.WHITE);
                 g.fillRect(0, 0, WIDTH, HEIGHT);
 
-                FaceFile f = imgMatris.get(imgIndex);
+                FileImage f = imgMatris.get(imgIndex);
 
-                for (Node n: f.getNodeArr()) {
-                    if (n.getValue() > 20) {
-                        g.setColor(Color.black);
-                    } else if (n.getValue() > 10) {
-                        g.setColor(Color.darkGray);
-                    } else if (n.getValue() > 8) {
-                        g.setColor(Color.green);
-                    } else {
-                        g.setColor(Color.WHITE);
+                for (int x = 0; x < f.getImgMatrix().length ; x++) {
+                    for (int y = 0; y < f.getImgMatrix().length ; y++) {
+                        if (f.getImgMatrix()[x][y] > 20) {
+                            g.setColor(Color.black);
+                        } else if (f.getImgMatrix()[x][y] > 10) {
+                            g.setColor(Color.darkGray);
+                        } else if (f.getImgMatrix()[x][y]  > 8) {
+                            g.setColor(Color.green);
+                        } else {
+                            g.setColor(Color.WHITE);
+                        }
+                        g.fillRect(x * 10, y *10, 10, 10);
                     }
-                    g.fillRect(n.getX() * 10, n.getY() * 10, 1 * 10, 1 * 10);
                 }
             }
         };

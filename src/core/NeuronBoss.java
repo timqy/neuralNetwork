@@ -1,16 +1,13 @@
 package core;
 
-import file.FaceFile;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
- * Created by dv13lan on 10/13/15.
+ *
  */
 public class NeuronBoss {
 
-    private Neuron[] neurons;
+    private ArrayList<Node> nodes;
 
     private double learningRate = 0.5;
     private double threshold = 0.6;
@@ -20,17 +17,13 @@ public class NeuronBoss {
      * Constructs a new NeuronBoss
      */
     public NeuronBoss() {
-        this.neurons = new Neuron[4];
+        nodes = new ArrayList<>();
     }
 
-
-    /**
-     * Trains the neurons.
-     */
-    public void trainNeurouns(ArrayList<FaceFile> faceFiles, HashMap<String, Integer> trainingFacit) {
-        double weightSum = 0;
-
+    public void registerNode() {
+        for(Node n : nodes) {
+           n.setConnection(nodes);
+        }
     }
-
 
 }

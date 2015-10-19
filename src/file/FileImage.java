@@ -7,14 +7,13 @@ import java.util.ArrayList;
 /**
  * Created by dv13thg on 10/7/15.
  */
-public class FaceFile {
+public class FileImage {
     private String name;
 
-    private ArrayList<Node> imgMatrix;
+    private int[][] imgMatrix;
 
-    public FaceFile() {
-
-        this.imgMatrix = new ArrayList<Node>();
+    public FileImage() {
+        imgMatrix = new int[20][20];
     }
 
     public void setName(String name) {
@@ -22,14 +21,14 @@ public class FaceFile {
     }
 
     public void setImgMatrix(int i , int k, int value) {
-        this.imgMatrix.add(new Node(i,k,value));
+        this.imgMatrix[i][k] = value;
     }
 
     public String getName() {
         return name;
     }
 
-    public ArrayList<Node> getNodeArr() {
+    public int[][] getImgMatrix() {
         return imgMatrix;
     }
 

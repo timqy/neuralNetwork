@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author dv13lan, dv13thg
  * @version 2015-10-13
  *
- * This class handles the parsing of the image and facit files.
+ * This class handles the parsing of the FileImage and facit files.
  * It is implemented using the singleton design pattern since we only need
  * one instance of this class.
  */
@@ -30,9 +30,9 @@ public class ImageParser {
      * @throws IOException
      * @throws NumberFormatException
      */
-    public ArrayList<FaceFile> parseImage(String filePath) throws IOException, NumberFormatException, FileNotFoundException {
-        ArrayList<FaceFile> imgArr = new ArrayList<FaceFile>();
-        FaceFile faceFile = new FaceFile();
+    public ArrayList<FileImage> parseImage(String filePath) throws IOException, NumberFormatException, FileNotFoundException {
+        ArrayList<FileImage> imgArr = new ArrayList<FileImage>();
+        FileImage FileImage = new FileImage();
         int lineNumber = 0;
 
         BufferedReader bufferedreader = new BufferedReader(new FileReader(filePath));
@@ -40,19 +40,19 @@ public class ImageParser {
 
         while((line = bufferedreader.readLine()) != null) {
             if (line.startsWith("#") || line.trim().length() == 0) {
-                if(faceFile.getName() != null && faceFile.getNodeArr().size() == (20*20)){
-                    imgArr.add(faceFile);
-                    faceFile = new FaceFile();
+                if(FileImage.getName() != null && FileImage.getImgMatrix().length == 20){
+                    imgArr.add(FileImage);
+                    FileImage = new FileImage();
                 }
             } else {
                 if (line.matches("^[0-9 ]+$")) {
                     String[] ArrNumbers = line.split(" ");
                     for (int i = 0; i < ArrNumbers.length; i++) {
-                        faceFile.setImgMatrix(lineNumber, i, Integer.parseInt(ArrNumbers[i]));
+                        FileImage.setImgMatrix(lineNumber, i, Integer.parseInt(ArrNumbers[i]));
                     }
                     lineNumber++;
                 } else {
-                    faceFile.setName(line);
+                    FileImage.setName(line);
                     lineNumber = 0;
                 }
 

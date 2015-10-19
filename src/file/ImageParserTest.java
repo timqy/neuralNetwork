@@ -9,7 +9,7 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 /**
- * Tests the image parser
+ * Tests the FileImage parser
  * @author dv13lan
  */
 public class ImageParserTest {

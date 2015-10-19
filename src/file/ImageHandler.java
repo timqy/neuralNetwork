@@ -15,87 +15,76 @@ public class ImageHandler {
      * @param imgMatrix the matrix to be analyzed
      * @return the value of the matrix
      */
-    private int matrixValue(ArrayList<Node> imgMatrix){
-        int value = 0;
-        for(Node node : imgMatrix) {
+    private int matrixValue(ArrayList<Integer> imgMatrix){
+        int sum = 0;
+        for(int value : imgMatrix) {
 
-            if (node.getValue() > (32 / 2))
-                value += node.getValue();
+            if (value> (32 / 2))
+                sum += value;
         }
-        return value;
+        return sum;
     }
 
-    public void RotateImageAnalyzer(ArrayList<Node> imgMatrix) {
+    public void RotateImageAnalyzer(int[][] imgMatrix) {
         int divided = 0;
         int value[] = new int[4];
-        int matrixValue = (imgMatrix.size() / 10) / 4;
+        int matrixValue = imgMatrix.length;
         while (divided < 4) {
-            ArrayList<Node> tempArr = new ArrayList<Node>();
+            ArrayList<Integer> tempArr = new ArrayList<>();
 
-            int xHigh = matrixValue * ((divided%2) + 1);
+            int xHigh = matrixValue * ((divided%2));
             int xLow = ((divided%2) * matrixValue);
-            int yHigh = (int) (matrixValue * (Math.floor(divided/2) + 1));
+            int yHigh = (int) (matrixValue * (Math.floor(divided/2)));
             int yLow = (int) (Math.floor(divided/2) * matrixValue);
 
-            for (Node node : imgMatrix) {
-                if (node.getX() < xHigh && xLow <= node.getX()
-                        && node.getY() < yHigh && yLow <= node.getY() ) {
-                    tempArr.add(node);
-                }
-            }
+            for(int x = xLow; x < xHigh; x++)
+                for(int y = yLow; y < yHigh; y++)
+                    tempArr.add(imgMatrix[x][y]);
             value[divided] = matrixValue(tempArr);
             divided++;
         }
         RotateImage(imgMatrix,value);
     }
 
-    private void RotateImage(ArrayList<Node> imgMatrix, int value[]) {
-        int matrixValue = (imgMatrix.size() / 10)/2;
-        switch(getIndexGreatestValue(value)){
+    private void RotateImage(int[][] imgMatrix, int value[]) {
+        int matrixValue = imgMatrix.length;
+        int[][] rotateImg = new int[matrixValue][matrixValue];
+        int[][] temp;
+        switch (getIndexGreatestValue(value)) {
             case 0:
                 /** Should not rotate */
                 break;
             case 1:
                 /**  Should be rotated 240 degrees */
-                for(int i = 0; i < 3; i++)
-                    for(Node node : imgMatrix){
-                        int x = node.getX();
-                        int Y = node.getY();
-                        node.setX(matrixValue - node.getY() - 1);
-                        node.setY(x);
-                    }
+                for (int i = 0; i < 3; i++)
+                    for (int x = 0; x < imgMatrix.length; x++)
+                        for (int y = 0; y < imgMatrix.length; y++)
+                            rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
                 break;
             case 2:
                 /**  Should be rotated 90 degrees */
-                for(Node node : imgMatrix){
-                    int x = node.getX();
-                    int Y = node.getY();
-                    node.setX(matrixValue - node.getY() - 1);
-                    node.setY(x);
-                }
+                for (int x = 0; x < imgMatrix.length; x++)
+                    for (int y = 0; y < imgMatrix.length; y++)
+                        rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
 
+                temp  = rotateImg.clone();
                 /** reverse each row */
-                for(Node node : imgMatrix){
-                    int x = node.getX();
-                    node.setX(matrixValue - x - 1);
-                }
-
+                for(int x = 0; x < matrixValue; x++)
+                    for(int y = 0; y < matrixValue; y++)
+                        rotateImg[matrixValue - x - 1][y] = temp[x][y];
                 break;
             case 3:
                 /**  Should be rotated 180 degrees */
                 for(int i = 0; i < 2; i++)
-                    for(Node node : imgMatrix){
-                        int x = node.getX();
-                        int Y = node.getY();
-                        node.setX(matrixValue - node.getY() - 1);
-                        node.setY(x);
-                    }
+                    for (int x = 0; x < imgMatrix.length; x++)
+                        for (int y = 0; y < imgMatrix.length; y++)
+                            rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
 
+                temp  = rotateImg.clone();
                 /** reverse each row */
-                for(Node node : imgMatrix){
-                    int x = node.getX();
-                    node.setX(matrixValue - x - 1);
-                }
+                for(int x = 0; x < matrixValue; x++)
+                    for(int y = 0; y < matrixValue; y++)
+                        rotateImg[matrixValue - x - 1][y] = temp[x][y];
                 break;
         }
     }
