@@ -7,9 +7,7 @@ public class Perceptron {
 
     public static void main(String[] args) {
         CLI cli;
-
         cli = new CLI();
-
         cli.run();
     }
 }

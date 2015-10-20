@@ -1,6 +1,6 @@
 package main;
 
-import core.Trainer;
+import core.ANN;
 import file.FileImage;
 import file.ImageHandler;
 import file.ImageParser;
@@ -100,7 +100,7 @@ public class CLI {
 
     private void startTraining(String[] argv) {
         if(argv.length == 2) {
-            Trainer trainer = new Trainer(FileImages, facitMap);
+            ANN trainer = new ANN(FileImages, facitMap);
             trainer.start(Integer.parseInt(argv[1]));
         }
     }
