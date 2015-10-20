@@ -79,7 +79,6 @@ public class ImageHandler {
             case 1:
                 /** if north half has the most value, it's already upright */
                 if(northHalf > eastHalf){
-                    System.out.println("top half has greatest values");
                     break;
                 }
                 /** east side has greatest value */
@@ -88,7 +87,7 @@ public class ImageHandler {
                 break;
             case 2:
                 if(westHalf > southHalf){
-                    /** south half is greatest */
+                    /** West is greatest */
                     imgMatrix = RotateMatrix(imgMatrix,1);
 
                 } else {
@@ -102,7 +101,6 @@ public class ImageHandler {
                     imgMatrix = RotateMatrix(imgMatrix,3);
                 } else {
                     /** south has greatest value */
-                    System.out.println("south has greatest values");
                     imgMatrix = RotateMatrix(imgMatrix,2);
                 }
         }
