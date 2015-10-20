@@ -25,7 +25,7 @@ public class CLI {
 
     private ImageParser parser;
     private HashMap<String, Integer> facitMap;
-    private ArrayList<FileImage> FileImages;
+    private ArrayList<FileImage> fileImages;
     private ImageHandler imageHandler;
 
 
@@ -37,7 +37,7 @@ public class CLI {
      */
     public CLI() {
         facitMap = new HashMap<>();
-        FileImages = new ArrayList<>();
+        fileImages = new ArrayList<>();
         imageHandler = new ImageHandler();
 
         scanner = new Scanner(System.in);
@@ -104,7 +104,7 @@ public class CLI {
      */
     private void startTraining(String[] argv) {
         if(argv.length == 2) {
-            ANN trainer = new ANN(FileImages, facitMap);
+            ANN trainer = new ANN(fileImages, facitMap);
             trainer.start(Integer.parseInt(argv[1]));
         }
     }
@@ -119,9 +119,9 @@ public class CLI {
      */
     private void showImage(int imgIndex) {
 
-        imageHandler.RotateImageAnalyzer(FileImages.get(imgIndex).getImgMatrix());
+        imageHandler.RotateImageAnalyzer(fileImages.get(imgIndex).getImgMatrix());
 
-        Gui g = new Gui(FileImages, imgIndex);
+        Gui g = new Gui(fileImages, imgIndex);
         g.setVisible();
 
     }
@@ -131,7 +131,7 @@ public class CLI {
      * how many noads that are loaded and how many answers that are loaded in.
      */
     private void status() {
-        System.out.println("There is "+ FileImages.size() +" nodes loaded.");
+        System.out.println("There is "+ fileImages.size() +" nodes loaded.");
         System.out.println("There is "+facitMap.size() +" facit entries loaded");
     }
 
@@ -174,18 +174,19 @@ public class CLI {
     private void loadimages() {
 
         try {
-            FileImages = parser.parseImage(RESOURCES_TRAINING_TXT);
+            fileImages = parser.parseImage(RESOURCES_TRAINING_TXT);
+            startImagePreProcessor();
         } catch (FileNotFoundException ff) {
             System.err.println("Could not load file "+RESOURCES_TRAINING_TXT);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //for(FileImage face : FileImages){
+        //for(FileImage face : fileImages){
           //  imageHandler.RotateImageAnalyzer(face.getImgMatrix());
         //}
 
-        System.out.println("Loaded default FileImages path, "+ FileImages.size() +" entities loaded!");
+        System.out.println("Loaded default fileImages path, "+ fileImages.size() +" entities loaded!");
 
     }
 
@@ -195,14 +196,21 @@ public class CLI {
      */
     private void loadimages(String filePath) {
         try {
-            FileImages = parser.parseImage(filePath);
+            fileImages = parser.parseImage(filePath);
+            startImagePreProcessor();
         } catch (FileNotFoundException ff) {
             System.err.println("Could not load file "+filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded FileImages path, "+ FileImages.size() +" entities loaded!");
+        System.out.println("Loaded fileImages path, "+ fileImages.size() +" entities loaded!");
+    }
+
+    private void startImagePreProcessor() {
+        for(FileImage image : fileImages) {
+            image.preProcessImage();
+        }
     }
 
 
