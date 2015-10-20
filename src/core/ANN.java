@@ -8,25 +8,27 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
+ * The ANN (A Neural Network) represents our neuralnetwork, contains methods to train it,
+ * verify its performance and test it on new images. An associated test for this class
+ * can be found and its called ANNTest.
  *
+ * @author dv13lan, dv13thg
+ * @version 20 okt - 2015
  */
 public class ANN {
 
     private double[][] weights;
-
     private double learningRate = 1;
     private double threshold = 0;
-
     private ArrayList<FileImage> imgList;
     private HashMap<String, Integer> facitFiles;
-
-    private ArrayList<NeuronNode> nodes;
 
     /**
      * Constructs a new Trainer object set with a dataset of imagefiles and
      * the correct answers to them.
-     * @param imgList
-     * @param facitFiles
+     *
+     * @param imgList A list containing Facefile images.
+     * @param facitFiles A list containing the correct answers.
      */
     public ANN(ArrayList<FileImage> imgList, HashMap<String, Integer> facitFiles) {
         this.imgList = imgList;
@@ -35,7 +37,8 @@ public class ANN {
     }
 
     /**
-     * Creates and initiates a new ANN.
+     * Creates and initiates a new ANN. Will allocate memory for the weights and
+     * initiate them with random values. Will also shuffle the list of Faceimages.
      */
     private void initANN(int size) {
         Collections.shuffle(imgList, new Random(System.nanoTime()));
@@ -89,14 +92,24 @@ public class ANN {
     }
 
     /**
+     * Given an image as parameter to this function, it will retrieve the 2d
+     * image array from the FaceImage and sum the weights together times the
+     * image data.
      *
-     * @param image
+     * If the imagedata at a pixel is 0 the wieghtsum will not increase.
+     *
+     * After the sums has been added together we will normalize the sum and
+     * then run the Sigmoid function on it.
+     *
+     * Finally then we will return the correct integer representation of
+     * SAD, HAPPY etc depending on the output from Sigmoid.
+     * @param image An image to analyse.
      * @return the value
      */
     private int activation(FileImage image) {
         // i : the image that we want to calculate the activation function for
         // (ai)
-        double x = 0;
+        double weightSum = 0;
 
         int[][] imageData = image.getImgMatrix();
 
@@ -105,24 +118,24 @@ public class ANN {
         // iterate through all rows and columns
         for (int j = 0; j < imageData.length; j++) {
             for (int k = 0; k < imageData[0].length; k++) {
-                x += imageData[j][k] * weights[j][k];
+                weightSum += imageData[j][k] * weights[j][k];
             }
         }
 
         // Normalize x
-        x = x / (imageData.length * imageData[0].length);
-        x = (x * 6) - 3;
+        weightSum = weightSum / (imageData.length * imageData[0].length);
+        weightSum = (weightSum * 6) - 3;
 
         // Sigmoid function
-        x = 1 / (1 + Math.exp(-x));
+        weightSum = 1 / (1 + Math.exp(-weightSum));
 
-        if (x < .25) {
+        if (weightSum < .25) {
             return 1;
-        } else if (x < .5) {
+        } else if (weightSum < .5) {
             return 2;
-        } else if (x < .75) {
+        } else if (weightSum < .75) {
             return 3;
-        } else if (x <= 1.0) {
+        } else if (weightSum <= 1.0) {
             return 4;
         } else {
             return 0;
@@ -130,8 +143,8 @@ public class ANN {
     }
 
     /**
-     *
-     * @return
+     * Tests the performance of the neural network.
+     * @return The percentage of correct answers as a double.
      */
     public double testPerformance() {
         double correctAnswers = 0;
@@ -147,13 +160,13 @@ public class ANN {
     }
 
     /**
-     *
-     * @param images
+     * Runs a clasification test on a set of images.
+     * @param images An array of images to perform the test on.
      */
     public void classificationTest(ArrayList<FileImage> images) {
         System.out.println("# - Happy, Sad, Mischievous or Mad - #");
         System.out.println("# Output: ");
-        for (FileImage image : imgList) {
+        for (FileImage image : images) {
             System.out.format("%s %d\n", image.getName(), activation(image));
         }
     }
