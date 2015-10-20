@@ -2,8 +2,10 @@ package core;
 
 import file.FileImage;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  *
