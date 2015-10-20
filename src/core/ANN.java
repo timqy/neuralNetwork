@@ -63,24 +63,65 @@ public class ANN {
     }
 
     private int act(ArrayList<FileImage> imgList, int i) {
-        return 0;
-    }
+        // i : the image that we want to calculate the activation function for
+        // (ai)
+        double x = 0;
+        FileImage image = imgList.get(i);
+        int[][] imageData = image.getImgMatrix();
 
-    /**
-     *
-     * @param trainingData
-     */
-    private void assignValues(int[][] trainingData) {
-        int counter = 0;
-
-        for (int i = 0; i < trainingData.length; i++) {
-            for (int j = 0; j < trainingData.length; j++) {
-                int pixel = trainingData[i][j];
-                nodes.get(counter).setValue(pixel);
-                counter++;
+        // Calculate the activation function
+        // Sum of each pixel times the weight in an image affects the result
+        // iterate through all rows and columns
+        for (int j = 0; j < imageData.length; j++) {
+            for (int k = 0; k < imageData[0].length; k++) {
+                x += imageData[j][k] * weights[j][k];
             }
         }
 
+        // Normalize x
+        x = x / (imageData.length * imageData[0].length);
+        x = (x * 6) - 3;
+
+        // Sigmoid function
+        x = 1 / (1 + Math.exp(-x));
+
+        if (x < .25) {
+            return 1;
+        } else if (x < .5) {
+            return 2;
+        } else if (x < .75) {
+            return 3;
+        } else if (x <= 1.0) {
+            return 4;
+        } else {
+            return 0;
+        }
+    }
+
+    public boolean testPerformance() {
+        boolean satisfying = false;
+        double right = 0;
+        double length = facitFiles.size();
+
+        // iterate through all images and count the correct answers
+        for (int i = 0; i < imgList.size(); i++) {
+            if (act(imgList, i) == facitFiles.get(i)) {
+                right++;
+            }
+        }
+        if (right / length >= threshold) {
+            satisfying = true;
+        }
+        return satisfying;
+    }
+
+    public void classificationTest(ArrayList<FileImage> images) {
+        System.out.println("# - Happy, Sad, Mischievous or Mad - #");
+        System.out.println("# Output: ");
+        for (int i = 0; i < images.size(); i++) {
+            System.out.format("%s %d\n", images.get(i).getName(),
+                    act(images, i));
+        }
     }
 
 }
