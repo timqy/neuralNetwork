@@ -7,7 +7,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Created by dv13thg on 10/7/15.
+ * Will paint a image to a Jframe. Has been used to debug image processing
+ * and rotation of images.
+ *
+ * @author dv13thg, dv13lan
+ * @version 15 okt - 2015
  */
 public class Gui {
 
@@ -16,6 +20,11 @@ public class Gui {
     private Canvas canvas;
     private int imgIndex;
 
+    /**
+     * Constructs a new GUI.
+     * @param imgMatris 2D image array to be used as database.
+     * @param imgIndex index to fetch from the database.
+     */
     public Gui(ArrayList<FileImage> imgMatris, int imgIndex) {
         this.imgMatris = imgMatris;
         this.imgIndex = imgIndex;
