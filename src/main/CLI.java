@@ -130,9 +130,6 @@ public class CLI {
      * @param imgIndex Index of image to show.
      */
     private void showImage(int imgIndex) {
-
-        imageHandler.RotateImageAnalyzer(fileImages.get(imgIndex).getImgMatrix());
-
         Gui g = new Gui(fileImages, imgIndex);
         g.setVisible();
 

@@ -50,21 +50,23 @@ public class ImageParser {
                 if (line.matches("^[0-9 ]+$")) {
                     String[] ArrNumbers = line.split(" ");
                     for (int i = 0; i < ArrNumbers.length; i++) {
-                        FileImage.setImgMatrix(lineNumber, i, Integer.parseInt(ArrNumbers[i]));
+                        FileImage.setImgMatrix(i,lineNumber, Integer.parseInt(ArrNumbers[i]));
                     }
                     lineNumber++;
                 } else {
                     FileImage.setName(line);
                     lineNumber = 0;
+
                 }
 
             }
         }
 
         ImageHandler ih = new ImageHandler();
-        for(FileImage image : imgArr)
-            ih.RotateImageAnalyzer(image.getImgMatrix());
-
+        for(FileImage image : imgArr) {
+            System.out.print(image.getName() + " : ");
+            ih.RotateImageAnalyzer(image);
+        }
         return imgArr;
     }
 

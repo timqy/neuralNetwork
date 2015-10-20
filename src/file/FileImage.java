@@ -60,6 +60,10 @@ public class FileImage {
         return imgMatrix;
     }
 
+    public void setCurrentImage(int[][] imgMatrix){
+        this.imgMatrix = imgMatrix;
+    }
+
     /**
      * Removes alone dots in the image for better looks
      * and easier processing.

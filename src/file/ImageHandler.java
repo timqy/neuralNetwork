@@ -18,7 +18,8 @@ public class ImageHandler {
     private int matrixSum(ArrayList<Integer> imgMatrix){
         int sum = 0;
         for(int value : imgMatrix) {
-            sum += value;
+            if(value >= 25)
+                sum += value;
         }
         return sum;
     }
@@ -26,30 +27,35 @@ public class ImageHandler {
     /**
      * analyzes the image by converting the image into 
      * four smaller ones, sums each image, calls rotate.
+     * @param image the image to be rotated
      */
-    public void RotateImageAnalyzer(int[][] imgMatrix) {
+    public void RotateImageAnalyzer(FileImage image) {
+        int[][] imgMatrix = image.getImgMatrix();
         int value[] = new int[4];
-        int divMax =4;
-        int matrixDivided = imgMatrix.length /divMax;
+        int divMax = 4;
+        int matrixDivided = (imgMatrix.length / divMax) * 2;
 
-        for(int divided = 0; divided < divMax; divided++){
+        for (int divided = 0; divided < divMax; divided++) {
             ArrayList<Integer> tempArr = new ArrayList<>();
 
             /** X low,high */
-            int xHigh = matrixDivided * ((divided%2)+1);
-            int xLow =  matrixDivided * (divided%2);
+            int xHigh = matrixDivided * ((divided % 2) + 1);
+            int xLow = matrixDivided * (divided % 2);
             /** Y low,high */
-            int yHigh = (int) (matrixDivided * (Math.floor(divided / 2) + 1) * 2);
-            int yLow = (int) (Math.floor(divided/2) * matrixDivided * 2);
+            int yHigh = (int) (matrixDivided * (Math.floor(divided / 2) + 1));
+            int yLow = (int) (Math.floor(divided / 2) * matrixDivided);
 
-            for(int x = xLow; x < xHigh; x++)
-                for(int y = yLow; y < yHigh; y++)
+            for (int x = xLow; x < xHigh; x++)
+                for (int y = yLow; y < yHigh; y++)
                     tempArr.add(imgMatrix[x][y]);
 
             value[divided] = matrixSum(tempArr);
         }
+
+
         /**rotate the image accordingly */
-        RotateImage(imgMatrix,value);
+        image.setCurrentImage(RotateImage(imgMatrix, value));
+
     }
 
 
@@ -60,45 +66,47 @@ public class ImageHandler {
      *
      *
      */
-    private void RotateImage(int[][] imgMatrix, int value[]) {
-        int matrixValue = imgMatrix.length;
-        int[][] rotateImg = cloneArr(imgMatrix);
+    private int[][] RotateImage(int[][] imgMatrix, int value[]) {
+        int northHalf = value[0]+value[1];
+        int westHalf = value[0]+value[2];
+        int eastHalf = value[1]+value[3];
+        int southHalf = value[2]+value[3];
+
         switch (getIndexGreatestValue(value)) {
             case 0:
                 /** Should not rotate */
                 break;
             case 1:
-                /**  Should be rotated 240 degrees */
-                for (int i = 0; i < 3; i++)
-                    for (int x = 0; x < imgMatrix.length; x++)
-                        for (int y = 0; y < imgMatrix.length; y++)
-                            imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
+                /** if north half has the most value, it's already upright */
+                if(northHalf > eastHalf){
+                    System.out.println("top half has greatest values");
+                    break;
+                }
+                /** east side has greatest value */
+                /** rotate 240 degrees */
+                imgMatrix = RotateMatrix(imgMatrix,3);
                 break;
             case 2:
-                /**  Should be rotated 90 degrees */
-                for (int x = 0; x < imgMatrix.length; x++)
-                    for (int y = 0; y < imgMatrix.length; y++)
-                        imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
+                if(westHalf > southHalf){
+                    /** south half is greatest */
+                    imgMatrix = RotateMatrix(imgMatrix,1);
 
-                rotateImg  = cloneArr(imgMatrix);
-
-                /** reverse each row */
-                for(int x = 0; x < matrixValue; x++)
-                    System.arraycopy(rotateImg[x], 0, imgMatrix[matrixValue - x - 1], 0, matrixValue);
+                } else {
+                    /** South has greatest value */
+                    imgMatrix = RotateMatrix(imgMatrix, 2);
+                }
                 break;
             case 3:
-                /**  Should be rotated 180 degrees */
-                for(int i = 0; i < 2; i++)
-                    for (int x = 0; x < imgMatrix.length; x++)
-                        for (int y = 0; y < imgMatrix.length; y++)
-                            imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
-
-                rotateImg  = cloneArr(imgMatrix);
-                /** reverse each row */
-                for(int x = 0; x < matrixValue; x++)
-                    System.arraycopy(rotateImg[x], 0, imgMatrix[matrixValue - x - 1], 0, matrixValue);
-                break;
+                if(eastHalf > southHalf){
+                    /** east half is greatest */
+                    imgMatrix = RotateMatrix(imgMatrix,3);
+                } else {
+                    /** south has greatest value */
+                    System.out.println("south has greatest values");
+                    imgMatrix = RotateMatrix(imgMatrix,2);
+                }
         }
+        return imgMatrix;
     }
 
     private static int getIndexGreatestValue(int value[]){
@@ -113,10 +121,18 @@ public class ImageHandler {
         return index;
     }
 
-    private int [][] cloneArr(int [][] arr){
-        int[][] clone = new int[arr.length][arr.length];
-        for(int i = 0; i < arr.length;i++)
-            System.arraycopy(arr[i], 0, clone[i], 0, arr.length);
-        return clone;
+    int[][] RotateMatrix(int[][] matrix, int rotateTimes) {
+        int[][] ret = new int[matrix.length][matrix.length];
+
+        for (int rotate = 1; rotate < rotateTimes; rotate++){
+            /** 90 degrees */
+            for (int i = 0; i < matrix.length; ++i) {
+                for (int j = 0; j < matrix.length; ++j) {
+                    ret[i][j] = matrix[matrix.length - j - 1][i];
+                }
+            }
+        }
+
+        return ret;
     }
 }
