@@ -98,11 +98,19 @@ public class CLI {
         }
     }
 
+    /**
+     * Starts the trainer. Will reset the nuralnetwork.
+     * @param argv
+     */
     private void startTraining(String[] argv) {
         if(argv.length == 2) {
             ANN trainer = new ANN(FileImages, facitMap);
             trainer.start(Integer.parseInt(argv[1]));
         }
+    }
+
+    private void performanceCheck(){
+
     }
 
     /**

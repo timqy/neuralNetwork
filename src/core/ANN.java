@@ -14,7 +14,7 @@ public class ANN {
     private double[][] weights;
 
     private double learningRate = 0.5;
-    private double threshold = 0.08;
+    private double threshold = 0.8;
 
     private ArrayList<FileImage> imgList;
     private HashMap<String, Integer> facitFiles;
@@ -47,18 +47,21 @@ public class ANN {
     }
 
     public void start(int noOfLoops) {
-        for (int i = 0; i < imgList.size(); i++) {
-            FileImage image = imgList.get(i);
-            int[][] imageData = image.getImgMatrix();
-            double error = facitFiles.get(i) - act(imgList, i);
+        while (noOfLoops >= 0) {
+            for (int i = 0; i < imgList.size(); i++) {
+                FileImage image = imgList.get(i);
+                int[][] imageData = image.getImgMatrix();
+                double error = facitFiles.get(imgList.get(i).getName()) - act(imgList, i);
 
-            // iterate through every weight/pixel
-            for (int j = 0; j < weights.length; j++) {
-                for (int k = 0; k < weights[0].length; k++) {
-                    double delta = learningRate * error * imageData[j][k];
-                    weights[j][k] += delta;
+                // iterate through every weight/pixel
+                for (int j = 0; j < weights.length; j++) {
+                    for (int k = 0; k < weights[0].length; k++) {
+                        double delta = learningRate * error * imageData[j][k];
+                        weights[j][k] += delta;
+                    }
                 }
             }
+            noOfLoops--;
         }
     }
 
@@ -66,6 +69,7 @@ public class ANN {
         // i : the image that we want to calculate the activation function for
         // (ai)
         double x = 0;
+
         FileImage image = imgList.get(i);
         int[][] imageData = image.getImgMatrix();
 
@@ -98,21 +102,17 @@ public class ANN {
         }
     }
 
-    public boolean testPerformance() {
-        boolean satisfying = false;
-        double right = 0;
-        double length = facitFiles.size();
-
+    public double testPerformance() {
+        double correctAnswers = 0;
         // iterate through all images and count the correct answers
         for (int i = 0; i < imgList.size(); i++) {
-            if (act(imgList, i) == facitFiles.get(i)) {
-                right++;
+            if (act(imgList, i) == facitFiles.get(imgList.get(i).getName())) {
+                correctAnswers++;
             }
         }
-        if (right / length >= threshold) {
-            satisfying = true;
-        }
-        return satisfying;
+
+        System.out.println("Correct %: "+ (correctAnswers / facitFiles.size()));
+        return correctAnswers / facitFiles.size();
     }
 
     public void classificationTest(ArrayList<FileImage> images) {
