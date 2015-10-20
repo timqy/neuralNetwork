@@ -1,13 +1,11 @@
 package file;
 
-import core.Node;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Created by dv13thg on 10/13/15.
+ *
+ * rotates the image so it faces upwards.
  */
 public class ImageHandler {
 
@@ -34,12 +32,12 @@ public class ImageHandler {
     public void RotateImageAnalyzer(int[][] imgMatrix) {
         int value[] = new int[4];
         int matrixValue = imgMatrix.length;
-        
-        for(int divided = 0; divided < 4; divided++; 
+
+        for(int divided = 0; divided < 4; divided++){
             ArrayList<Integer> tempArr = new ArrayList<>();
 
             /** X low,high */
-            int xHigh = matrixValue * ((divided%2)i+1);
+            int xHigh = matrixValue * ((divided%2)+1);
             int xLow = ((divided%2) * matrixValue);
             /** Y low,high */
             int yHigh = (int) (matrixValue * (Math.floor(divided/2)+1));
@@ -52,7 +50,7 @@ public class ImageHandler {
             value[divided] = matrixSum(tempArr);
         }
         /**rotate the image accordingly */
-        imgMatrix = RotateImage(imgMatrix,value);
+        RotateImage(imgMatrix,value);
     }
 
 
@@ -63,10 +61,9 @@ public class ImageHandler {
      *
      *
      */
-    private int[][] RotateImage(int[][] imgMatrix, int value[]) {
+    private void RotateImage(int[][] imgMatrix, int value[]) {
         int matrixValue = imgMatrix.length;
-        int[][] rotateImg = new int[matrixValue][matrixValue];
-        int[][] temp;
+        int[][] rotateImg = imgMatrix.clone();
         switch (getIndexGreatestValue(value)) {
             case 0:
                 /** Should not rotate */
@@ -76,35 +73,35 @@ public class ImageHandler {
                 for (int i = 0; i < 3; i++)
                     for (int x = 0; x < imgMatrix.length; x++)
                         for (int y = 0; y < imgMatrix.length; y++)
-                            rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
+                            imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
                 break;
             case 2:
                 /**  Should be rotated 90 degrees */
                 for (int x = 0; x < imgMatrix.length; x++)
                     for (int y = 0; y < imgMatrix.length; y++)
-                        rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
+                        imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
 
-                temp  = rotateImg.clone();
+                rotateImg  = imgMatrix.clone();
+
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
                     for(int y = 0; y < matrixValue; y++)
-                        rotateImg[matrixValue - x - 1][y] = temp[x][y];
+                        imgMatrix[matrixValue - x - 1][y] = rotateImg[x][y];
                 break;
             case 3:
                 /**  Should be rotated 180 degrees */
                 for(int i = 0; i < 2; i++)
                     for (int x = 0; x < imgMatrix.length; x++)
                         for (int y = 0; y < imgMatrix.length; y++)
-                            rotateImg[(matrixValue - y - 1)][x] = imgMatrix[x][y];
+                            imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
 
-                temp  = rotateImg.clone();
+                rotateImg  = imgMatrix.clone();
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
                     for(int y = 0; y < matrixValue; y++)
-                        rotateImg[matrixValue - x - 1][y] = temp[x][y];
+                        imgMatrix[matrixValue - x - 1][y] = rotateImg[x][y];
                 break;
         }
-        return rotateImg;
     }
 
     private static int getIndexGreatestValue(int value[]){
