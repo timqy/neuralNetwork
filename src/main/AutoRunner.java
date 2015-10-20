@@ -43,6 +43,7 @@ public class AutoRunner {
      * Starts running the automatic run of the NeuralNetwork.
      */
     public void run() {
+        prepareData();
         ANN neuralNetwork = new ANN(trainingData,facitData);
 
         //Train train train
@@ -52,5 +53,16 @@ public class AutoRunner {
         neuralNetwork.classificationTest(testData);
 
 
+    }
+
+    /**
+     * Will pre-process all images before use in the neural network.
+     */
+    private void prepareData() {
+        for(FileImage img : trainingData)
+            img.preProcessImage();
+
+        for(FileImage img : testData)
+            img.preProcessImage();
     }
 }
