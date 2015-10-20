@@ -146,17 +146,15 @@ public class ANN {
      * Tests the performance of the neural network.
      * @return The percentage of correct answers as a double.
      */
-    public double testPerformance() {
+    public double testPerformance(ArrayList<FileImage> images) {
         double correctAnswers = 0;
         // iterate through all images and count the correct answers
-        for (FileImage image : imgList) {
+        for (FileImage image : images) {
             if (activation(image) == facitFiles.get(image.getName())) {
                 correctAnswers++;
             }
         }
-
-        System.out.println("Correct %: "+ (100.0 * (correctAnswers / facitFiles.size())));
-        return correctAnswers / facitFiles.size();
+        return 100.0 * (correctAnswers / facitFiles.size());
     }
 
     /**

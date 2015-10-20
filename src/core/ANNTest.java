@@ -58,7 +58,7 @@ public class ANNTest {
     public void testTestPerformance() throws Exception {
         neuralNetwork.start(NO_OF_LOOPS);
 
-        double result = neuralNetwork.testPerformance();
+        double result = neuralNetwork.testPerformance(images);
 
         assertTrue(result >= PASS_PERCENTAGE);
     }
