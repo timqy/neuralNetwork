@@ -19,12 +19,19 @@ import static org.junit.Assert.*;
 public class ANNTest {
 
     //Training loops
-    public static final int NO_OF_LOOPS = 100;
+    public static final int NO_OF_LOOPS = 100000;
+    public static final double PASS_PERCENTAGE = 0.5;
 
     private ANN neuralNetwork;
     private ArrayList<FileImage> images;
     private HashMap<String, Integer> facit;
 
+    /**
+     * Setups the tests. It will read the default training file and
+     * the default facit file from the CLI constants.
+     *
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
         ImageParser parser = ImageParser.getInstance();
@@ -34,20 +41,25 @@ public class ANNTest {
         neuralNetwork = new ANN(images,facit);
     }
 
-    @Test
-    public void testStart() throws Exception {
-        neuralNetwork.start(NO_OF_LOOPS);
-    }
-
+    /**
+     * Runs the performance test, the test will accept all and inclusive
+     * the PASS_PERCENTAGE constant.
+     *
+     * @throws Exception
+     */
     @Test
     public void testTestPerformance() throws Exception {
         neuralNetwork.start(NO_OF_LOOPS);
 
         double result = neuralNetwork.testPerformance();
 
-        assertTrue(result > 0.5);
+        assertTrue(result >= PASS_PERCENTAGE);
     }
 
+    /**
+     * Runs the test for classification for the images.
+     * @throws Exception
+     */
     @Test
     public void testClassificationTest() throws Exception {
         neuralNetwork.start(NO_OF_LOOPS);

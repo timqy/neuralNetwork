@@ -46,12 +46,16 @@ public class ANN {
         }
     }
 
+    /**
+     *
+     * @param noOfLoops The number of loops it will train.
+     */
     public void start(int noOfLoops) {
         while (noOfLoops >= 0) {
             for (int i = 0; i < imgList.size(); i++) {
                 FileImage image = imgList.get(i);
                 int[][] imageData = image.getImgMatrix();
-                double error = facitFiles.get(imgList.get(i).getName()) - act(imgList, i);
+                double error = facitFiles.get(imgList.get(i).getName()) - activation(imgList, i);
 
                 // iterate through every weight/pixel
                 for (int j = 0; j < weights.length; j++) {
@@ -65,7 +69,13 @@ public class ANN {
         }
     }
 
-    private int act(ArrayList<FileImage> imgList, int i) {
+    /**
+     *
+     * @param imgList
+     * @param i
+     * @return
+     */
+    private int activation(ArrayList<FileImage> imgList, int i) {
         // i : the image that we want to calculate the activation function for
         // (ai)
         double x = 0;
@@ -102,11 +112,15 @@ public class ANN {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public double testPerformance() {
         double correctAnswers = 0;
         // iterate through all images and count the correct answers
         for (int i = 0; i < imgList.size(); i++) {
-            if (act(imgList, i) == facitFiles.get(imgList.get(i).getName())) {
+            if (activation(imgList, i) == facitFiles.get(imgList.get(i).getName())) {
                 correctAnswers++;
             }
         }
@@ -115,12 +129,16 @@ public class ANN {
         return correctAnswers / facitFiles.size();
     }
 
+    /**
+     *
+     * @param images
+     */
     public void classificationTest(ArrayList<FileImage> images) {
         System.out.println("# - Happy, Sad, Mischievous or Mad - #");
         System.out.println("# Output: ");
         for (int i = 0; i < images.size(); i++) {
             System.out.format("%s %d\n", images.get(i).getName(),
-                    act(images, i));
+                    activation(images, i));
         }
     }
 
