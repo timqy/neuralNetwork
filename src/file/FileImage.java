@@ -1,32 +1,64 @@
 package file;
 
 /**
- * Created by dv13thg on 10/7/15.
+ * A FileImage is a 2d array of integers associated with a name.
+ * The FileImage contains a name with a 2D array representing the
+ * image data.
+ *
+ * @author dv13thg, dv13lan
+ * @version 20 okt - 2015
  */
 public class FileImage {
+
+    public static final int PIXEL_THRESHOLD = 8;
     private String name;
 
     private int[][] imgMatrix;
 
+    /**
+     * Creates a new FileImage and allocates a 20*20 2d array for
+     * the pixels.
+     */
     public FileImage() {
         imgMatrix = new int[20][20];
     }
 
+    /**
+     * Sets the name of the Image, this is so it can be compared to the
+     * facit file later.
+     * @param name A string representing the name for this FileImage.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setImgMatrix(int i , int k, int value) {
-        if(value > 8)
-            this.imgMatrix[i][k] = 1;
+    /**
+     * Sets a value into the 2d array of integers. It uses a threshold to
+     * determine if the pixel is black enough to be counted as 1 or as 0.
+     *
+     * @param x X axis coordinate.
+     * @param y Y axis coordinate.
+     * @param value An integer representing a pixel value.
+     */
+    public void setImgMatrix(int x , int y, int value) {
+        if(value > PIXEL_THRESHOLD)
+            this.imgMatrix[x][y] = 1;
         else
-            this.imgMatrix[i][k] = 0;
+            this.imgMatrix[x][y] = 0;
     }
 
+    /**
+     * Returns the name associated with this FaceImage object.
+     * @return A String representing the name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the 2d array (Image) of this Faceimage.
+     * @return The image represented in a 2D array of integers.
+     */
     public int[][] getImgMatrix() {
         return imgMatrix;
     }
@@ -72,6 +104,4 @@ public class FileImage {
 
         return foundAdjNode;
     }
-
-
 }
