@@ -2,9 +2,7 @@ package core;
 
 import file.FileImage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  *
@@ -13,7 +11,7 @@ public class ANN {
 
     private double[][] weights;
 
-    private double learningRate = 0.5;
+    private double learningRate = 0.1;
     private double threshold = 0.8;
 
     private ArrayList<FileImage> imgList;
@@ -37,11 +35,13 @@ public class ANN {
      * Creates and initiates a new ANN.
      */
     private void initANN(int size) {
+        Collections.shuffle(imgList, new Random(System.nanoTime()));
+
         weights = new double[size][size];
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                weights[i][j] = 0;
+                weights[i][j] = new Random().nextDouble();
             }
         }
     }
@@ -111,7 +111,7 @@ public class ANN {
             }
         }
 
-        System.out.println("Correct %: "+ (correctAnswers / facitFiles.size()));
+        System.out.println("Correct %: "+ (100.0 * (correctAnswers / facitFiles.size())));
         return correctAnswers / facitFiles.size();
     }
 
