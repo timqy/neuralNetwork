@@ -2,6 +2,7 @@ package core;
 
 import file.FileImage;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -11,8 +12,8 @@ public class ANN {
 
     private double[][] weights;
 
-    private double learningRate = 0.1;
-    private double threshold = 0.8;
+    private double learningRate = 1;
+    private double threshold = 0;
 
     private ArrayList<FileImage> imgList;
     private HashMap<String, Integer> facitFiles;
@@ -52,18 +53,34 @@ public class ANN {
      */
     public void start(int noOfLoops) {
         while (noOfLoops >= 0) {
-            for (int i = 0; i < imgList.size(); i++) {
-                FileImage image = imgList.get(i);
-                int[][] imageData = image.getImgMatrix();
-                double error = facitFiles.get(imgList.get(i).getName()) - activation(imgList, i);
+            for (FileImage image : imgList) {
+                System.out.println("testing image : " + image.getName());
+                double error;
 
-                // iterate through every weight/pixel
-                for (int j = 0; j < weights.length; j++) {
-                    for (int k = 0; k < weights[0].length; k++) {
-                        double delta = learningRate * error * imageData[j][k];
-                        weights[j][k] += delta;
+                for(int i = 0; i < 20; i++ ) {
+                    for (int k = 0; k < 20; k++) {
+                        if (image.getImgMatrix()[i][k] > 9){
+                            image.getImgMatrix()[i][k] = 1;
+                        } else
+                        {
+                            image.getImgMatrix()[i][k] = 0;
+                        }
                     }
                 }
+
+                do {
+                    int[][] imageData = image.getImgMatrix();
+                    error = facitFiles.get(image.getName()) - activation(image);
+
+                    // iterate through every weight/pixel
+                    for (int j = 0; j < weights.length; j++) {
+                        for (int k = 0; k < weights[0].length; k++) {
+                            double delta = learningRate * error * imageData[j][k];
+                            weights[j][k] += delta;
+                        }
+                    }
+                    System.out.println("show error : " + error  + " FACEIT " + facitFiles.get(image.getName()));
+                } while(Math.abs(error) == threshold);
             }
             noOfLoops--;
         }
@@ -71,16 +88,14 @@ public class ANN {
 
     /**
      *
-     * @param imgList
-     * @param i
-     * @return
+     * @param image
+     * @return the value
      */
-    private int activation(ArrayList<FileImage> imgList, int i) {
+    private int activation(FileImage image) {
         // i : the image that we want to calculate the activation function for
         // (ai)
         double x = 0;
 
-        FileImage image = imgList.get(i);
         int[][] imageData = image.getImgMatrix();
 
         // Calculate the activation function
@@ -119,8 +134,8 @@ public class ANN {
     public double testPerformance() {
         double correctAnswers = 0;
         // iterate through all images and count the correct answers
-        for (int i = 0; i < imgList.size(); i++) {
-            if (activation(imgList, i) == facitFiles.get(imgList.get(i).getName())) {
+        for (FileImage image : imgList) {
+            if (activation(image) == facitFiles.get(image.getName())) {
                 correctAnswers++;
             }
         }
@@ -136,9 +151,8 @@ public class ANN {
     public void classificationTest(ArrayList<FileImage> images) {
         System.out.println("# - Happy, Sad, Mischievous or Mad - #");
         System.out.println("# Output: ");
-        for (int i = 0; i < images.size(); i++) {
-            System.out.format("%s %d\n", images.get(i).getName(),
-                    activation(images, i));
+        for (FileImage image : imgList) {
+            System.out.format("%s %d\n", image.getName(), activation(image));
         }
     }
 

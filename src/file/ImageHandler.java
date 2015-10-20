@@ -18,9 +18,7 @@ public class ImageHandler {
     private int matrixSum(ArrayList<Integer> imgMatrix){
         int sum = 0;
         for(int value : imgMatrix) {
-
-            if (value> (32 / 2))
-                sum += value;
+            sum += value;
         }
         return sum;
     }
@@ -31,22 +29,23 @@ public class ImageHandler {
      */
     public void RotateImageAnalyzer(int[][] imgMatrix) {
         int value[] = new int[4];
-        int matrixValue = imgMatrix.length;
+        int divMax =4;
+        int matrixDivided = imgMatrix.length /divMax;
 
-        for(int divided = 0; divided < 4; divided++){
+        for(int divided = 0; divided < divMax; divided++){
             ArrayList<Integer> tempArr = new ArrayList<>();
 
             /** X low,high */
-            int xHigh = matrixValue * ((divided%2)+1);
-            int xLow = ((divided%2) * matrixValue);
+            int xHigh = matrixDivided * ((divided%2)+1);
+            int xLow =  matrixDivided * (divided%2);
             /** Y low,high */
-            int yHigh = (int) (matrixValue * (Math.floor(divided/2)+1));
-            int yLow = (int) (Math.floor(divided/2) * matrixValue);
+            int yHigh = (int) (matrixDivided * (Math.floor(divided / 2) + 1) * 2);
+            int yLow = (int) (Math.floor(divided/2) * matrixDivided * 2);
 
             for(int x = xLow; x < xHigh; x++)
                 for(int y = yLow; y < yHigh; y++)
                     tempArr.add(imgMatrix[x][y]);
-            
+
             value[divided] = matrixSum(tempArr);
         }
         /**rotate the image accordingly */
@@ -63,7 +62,7 @@ public class ImageHandler {
      */
     private void RotateImage(int[][] imgMatrix, int value[]) {
         int matrixValue = imgMatrix.length;
-        int[][] rotateImg = imgMatrix.clone();
+        int[][] rotateImg = cloneArr(imgMatrix);
         switch (getIndexGreatestValue(value)) {
             case 0:
                 /** Should not rotate */
@@ -81,7 +80,7 @@ public class ImageHandler {
                     for (int y = 0; y < imgMatrix.length; y++)
                         imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
 
-                rotateImg  = imgMatrix.clone();
+                rotateImg  = cloneArr(imgMatrix);
 
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
@@ -95,7 +94,7 @@ public class ImageHandler {
                         for (int y = 0; y < imgMatrix.length; y++)
                             imgMatrix[(matrixValue - y - 1)][x] = rotateImg[x][y];
 
-                rotateImg  = imgMatrix.clone();
+                rotateImg  = cloneArr(imgMatrix);
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
                     for(int y = 0; y < matrixValue; y++)
@@ -114,5 +113,13 @@ public class ImageHandler {
             }
         }
         return index;
+    }
+
+    private int [][] cloneArr(int [][] arr){
+        int[][] clone = new int[arr.length][arr.length];
+        for(int i = 0; i < arr.length;i++)
+            for(int k = 0; k < arr.length;k++)
+                clone[i][k] = arr[i][k];
+        return clone;
     }
 }

@@ -59,6 +59,10 @@ public class ImageParser {
             }
         }
 
+        ImageHandler ih = new ImageHandler();
+        for(FileImage image : imgArr)
+            ih.RotateImageAnalyzer(image.getImgMatrix());
+
         return imgArr;
     }
 

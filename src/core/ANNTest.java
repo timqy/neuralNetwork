@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -19,7 +20,7 @@ import static org.junit.Assert.*;
 public class ANNTest {
 
     //Training loops
-    public static final int NO_OF_LOOPS = 100000;
+    public static final int NO_OF_LOOPS = 1;
     public static final double PASS_PERCENTAGE = 0.5;
 
     private ANN neuralNetwork;
@@ -38,7 +39,13 @@ public class ANNTest {
         facit = parser.parseFacit(CLI.RESOURCES_TRAINING_FACIT_TXT);
         images = parser.parseImage(CLI.RESOURCES_TRAINING_TXT);
 
-        neuralNetwork = new ANN(images,facit);
+        ArrayList<FileImage> clone = new ArrayList<>();
+        Collections.shuffle(images);
+
+        for(int i = 0; i < 100;i++)
+            clone.add(images.get(i));
+
+        neuralNetwork = new ANN(clone,facit);
     }
 
     /**

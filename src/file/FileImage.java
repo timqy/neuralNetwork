@@ -21,7 +21,10 @@ public class FileImage {
     }
 
     public void setImgMatrix(int i , int k, int value) {
-        this.imgMatrix[i][k] = value;
+        if(value > 8)
+            this.imgMatrix[i][k] = 1;
+        else
+            this.imgMatrix[i][k] = 0;
     }
 
     public String getName() {
