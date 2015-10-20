@@ -41,10 +41,7 @@ public class FileImage {
      * @param value An integer representing a pixel value.
      */
     public void setImgMatrix(int x , int y, int value) {
-        if(value > PIXEL_THRESHOLD)
-            this.imgMatrix[x][y] = 1;
-        else
-            this.imgMatrix[x][y] = 0;
+       this.imgMatrix[x][y] = value;
     }
 
     /**
@@ -68,6 +65,16 @@ public class FileImage {
      * and easier processing.
      */
     public void preProcessImage() {
+
+        for (int x = 0; x < imgMatrix.length; x++) {
+            for (int y = 0; y < imgMatrix[0].length; y++) {
+                if(imgMatrix[x][y] > PIXEL_THRESHOLD)
+                    imgMatrix[x][y] = 1;
+                else
+                    imgMatrix[x][y] = 0;
+            }
+        }
+
         for (int i = 0; i < imgMatrix.length; i++) {
             for (int j = 0; j < imgMatrix[0].length; j++) {
                 if(!adjNodes(i,j)) {
