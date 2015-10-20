@@ -10,7 +10,7 @@ public class Perceptron {
      * Launches the program either in CLI mode or in automatic mode depending
      * on the number of arguments.
      *
-     * @param args If 0 arguments is passed then the program will automaticly
+     * @param args If 0 arguments is passed then the program will automatically
      *             launch in CLI mode. If 3 arguments are passed into the program
      *             it will launch in automatic mode and will give
      */

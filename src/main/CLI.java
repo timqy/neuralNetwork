@@ -32,7 +32,7 @@ public class CLI {
     private Scanner scanner;
 
     /**
-     * Constructs a new CLI. Setups the hashmaps and the arraylists.
+     * Constructs a new CLI. Setups the hashmap and the array lists.
      * It also gets an instance of the Imageparser as well as a new scanner from System.in
      */
     public CLI() {
@@ -60,50 +60,63 @@ public class CLI {
             userInput = scanner.nextLine();
             String[] argv = userInput.split(" ");
 
-            if (argv[0].equals("help")) {
+            switch (argv[0]) {
+                case "help":
 
-                printHelp();
+                    printHelp();
 
-            } else if(argv[0].equals("loadfacit")) {
+                    break;
 
-                if(argv.length == 2)
-                    loadfacit(argv[1]);
-                else
-                    loadfacit();
+                case "loadfacit":
 
-            } else if(argv[0].equals("loadimages")) {
+                    if (argv.length == 2)
+                        loadfacit(argv[1]);
+                    else
+                        loadfacit();
 
-                if (argv.length == 2)
-                    loadimages(argv[1]);
-                else
-                    loadimages();
+                    break;
 
-            } else if(argv[0].equals("status")) {
-                status();
+                case "loadimages":
 
-            } else if (argv[0].equals("showimg")) {
-                if(argv.length == 2) {
-                    try {
-                        showImage(Integer.parseInt(argv[1]));
-                    }catch (NumberFormatException ex) {
-                        System.err.println("Error: Second argument needs to be a number.");
+                    if (argv.length == 2)
+                        loadimages(argv[1]);
+                    else
+                        loadimages();
+
+                    break;
+
+                case "status":
+                    status();
+
+                    break;
+
+                case "showimg":
+                    if (argv.length == 2) {
+                        try {
+                            showImage(Integer.parseInt(argv[1]));
+                        } catch (NumberFormatException ex) {
+                            System.err.println("Error: Second argument needs to be a number.");
+                        }
                     }
-                }
-            } else if(argv[0].equals("train")) {
+                    break;
 
-                startTraining(argv);
+                case "train":
+                    startTraining(argv);
+                    break;
+                case "quit":
+                    quit = true;
+                    break;
 
-            } else if(argv[0].equals("quit")) {
-                quit = true;
-            } else {
-                System.err.println("Unknown command.");
+                default:
+                    System.err.println("Unknown command.");
+                    break;
             }
         }
     }
 
     /**
-     * Starts the trainer. Will reset the nuralnetwork.
-     * @param argv
+     * Starts the trainer. Will reset the neural network
+     * @param argv An Array containing the arguments to the training.
      */
     private void startTraining(String[] argv) {
         if(argv.length == 2) {
@@ -112,13 +125,9 @@ public class CLI {
         }
     }
 
-    private void performanceCheck(){
-
-    }
-
     /**
-     *
-     * @param imgIndex
+     * Shows an image from the training files.
+     * @param imgIndex Index of image to show.
      */
     private void showImage(int imgIndex) {
 
@@ -155,7 +164,7 @@ public class CLI {
 
     /**
      * Loads a facit file from a path.
-     * @param filePath
+     * @param filePath A string representing the facit file path.
      */
     private void loadfacit(String filePath) {
         try{
@@ -166,8 +175,6 @@ public class CLI {
             e.printStackTrace();
         }
 
-
-
         System.out.println("Loaded faceit path, "+facitMap.size() +" entities loaded!");
     }
 
@@ -175,7 +182,6 @@ public class CLI {
      * Loads the imagefiles.
      */
     private void loadimages() {
-
         try {
             fileImages = parser.parseImage(RESOURCES_TRAINING_TXT);
             startImagePreProcessor();

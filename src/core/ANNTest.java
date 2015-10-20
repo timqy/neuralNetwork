@@ -25,7 +25,6 @@ public class ANNTest {
 
     private ANN neuralNetwork;
     private ArrayList<FileImage> images;
-    private HashMap<String, Integer> facit;
 
     /**
      * Setups the tests. It will read the default training file and
@@ -36,7 +35,8 @@ public class ANNTest {
     @Before
     public void setUp() throws Exception {
         ImageParser parser = ImageParser.getInstance();
-        facit = parser.parseFacit(CLI.RESOURCES_TRAINING_FACIT_TXT);
+        HashMap<String, Integer> facit = parser.parseFacit(CLI.RESOURCES_TRAINING_FACIT_TXT);
+
         images = parser.parseImage(CLI.RESOURCES_TRAINING_TXT);
 
         ArrayList<FileImage> clone = new ArrayList<>();
@@ -45,7 +45,7 @@ public class ANNTest {
         for(int i = 0; i < 100;i++)
             clone.add(images.get(i));
 
-        neuralNetwork = new ANN(clone,facit);
+        neuralNetwork = new ANN(clone, facit);
     }
 
     /**

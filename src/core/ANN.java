@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * The ANN (A Neural Network) represents our neuralnetwork, contains methods to train it,
+ * The ANN (A Neural Network) represents our neural network, contains methods to train it,
  * verify its performance and test it on new images. An associated test for this class
  * can be found and its called ANNTest.
  *
@@ -17,14 +17,14 @@ import java.util.Random;
  */
 public class ANN {
 
+    public static final double LEARNING_RATE = 0.8;
+    public static final int ERROR_THRESHOLD = 0;
     private double[][] weights;
-    private double learningRate = 1;
-    private double threshold = 0;
     private ArrayList<FileImage> imgList;
     private HashMap<String, Integer> facitFiles;
 
     /**
-     * Constructs a new Trainer object set with a dataset of imagefiles and
+     * Constructs a new Trainer object set with a data set of image files and
      * the correct answers to them.
      *
      * @param imgList A list containing Facefile images.
@@ -33,20 +33,20 @@ public class ANN {
     public ANN(ArrayList<FileImage> imgList, HashMap<String, Integer> facitFiles) {
         this.imgList = imgList;
         this.facitFiles = facitFiles;
-        initANN(20);
+        initANN();
     }
 
     /**
      * Creates and initiates a new ANN. Will allocate memory for the weights and
      * initiate them with random values. Will also shuffle the list of Faceimages.
      */
-    private void initANN(int size) {
+    private void initANN() {
         Collections.shuffle(imgList, new Random(System.nanoTime()));
 
-        weights = new double[size][size];
+        weights = new double[20][20];
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
                 weights[i][j] = new Random().nextDouble();
             }
         }
@@ -80,12 +80,12 @@ public class ANN {
                     // iterate through every weight/pixel
                     for (int j = 0; j < weights.length; j++) {
                         for (int k = 0; k < weights[0].length; k++) {
-                            double delta = learningRate * error * imageData[j][k];
+                            double delta = LEARNING_RATE * error * imageData[j][k];
                             weights[j][k] += delta;
                         }
                     }
                     System.out.println("show error : " + error  + " FACEIT " + facitFiles.get(image.getName()));
-                } while(Math.abs(error) == threshold);
+                } while(Math.abs(error) == ERROR_THRESHOLD);
             }
             noOfLoops--;
         }
@@ -96,7 +96,7 @@ public class ANN {
      * image array from the FaceImage and sum the weights together times the
      * image data.
      *
-     * If the imagedata at a pixel is 0 the wieghtsum will not increase.
+     * If the image data at a pixel is 0 the sum of the weights will not increase.
      *
      * After the sums has been added together we will normalize the sum and
      * then run the Sigmoid function on it.

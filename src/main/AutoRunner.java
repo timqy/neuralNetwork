@@ -23,10 +23,10 @@ public class AutoRunner {
     /**
      * Constructs a new Autorunner object.
      *
-     * @param trainingPath A string representing the filepath to the training
+     * @param trainingPath A string representing the file path to the training
      *                     file.
-     * @param facitPath A string representing the filepath to the facit file.
-     * @param testFilePath A string representing the filepath to the test
+     * @param facitPath A string representing the file path to the facit file.
+     * @param testFilePath A string representing the file path to the test
      *                     images that are not included in the training file.
      */
     public AutoRunner(String trainingPath, String facitPath, String testFilePath) {

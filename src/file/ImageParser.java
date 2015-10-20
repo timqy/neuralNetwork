@@ -2,7 +2,6 @@ package file;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +32,8 @@ public class ImageParser {
      * @throws IOException
      * @throws NumberFormatException
      */
-    public ArrayList<FileImage> parseImage(String filePath) throws IOException, NumberFormatException, FileNotFoundException {
-        ArrayList<FileImage> imgArr = new ArrayList<FileImage>();
+    public ArrayList<FileImage> parseImage(String filePath) throws IOException, NumberFormatException {
+        ArrayList<FileImage> imgArr = new ArrayList<>();
         FileImage FileImage = new FileImage();
         int lineNumber = 0;
 
@@ -73,11 +72,11 @@ public class ImageParser {
     /**
      * Parses a facit file and writes the imagename as key and integer value as
      * integer value to the hashmap.
-     * @param filepath filepath to the facit file.
+     * @param filepath file path to the facit file.
      * @return An hashmap.
      */
-    public HashMap<String, Integer> parseFacit(String filepath) throws IOException, FileNotFoundException {
-        HashMap<String, Integer> facitMap = new HashMap<String, Integer>();
+    public HashMap<String, Integer> parseFacit(String filepath) throws IOException {
+        HashMap<String, Integer> facitMap = new HashMap<>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
 
         String line;
