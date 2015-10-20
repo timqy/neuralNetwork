@@ -44,7 +44,9 @@ public class CLI {
         parser = ImageParser.getInstance();
     }
 
-
+    /**
+     * Main shell loop, will read and execute commands. Split arguments at spaces.
+     */
     public void run() {
         boolean quit = false;
         String userInput;
@@ -91,8 +93,9 @@ public class CLI {
 
                 startTraining(argv);
 
+            } else if(argv[0].equals("quit")) {
+                quit = true;
             } else {
-                //HELLO
                 System.err.println("Unknown command.");
             }
         }

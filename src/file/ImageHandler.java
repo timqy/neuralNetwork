@@ -84,8 +84,7 @@ public class ImageHandler {
 
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
-                    for(int y = 0; y < matrixValue; y++)
-                        imgMatrix[matrixValue - x - 1][y] = rotateImg[x][y];
+                    System.arraycopy(rotateImg[x], 0, imgMatrix[matrixValue - x - 1], 0, matrixValue);
                 break;
             case 3:
                 /**  Should be rotated 180 degrees */
@@ -97,8 +96,7 @@ public class ImageHandler {
                 rotateImg  = cloneArr(imgMatrix);
                 /** reverse each row */
                 for(int x = 0; x < matrixValue; x++)
-                    for(int y = 0; y < matrixValue; y++)
-                        imgMatrix[matrixValue - x - 1][y] = rotateImg[x][y];
+                    System.arraycopy(rotateImg[x], 0, imgMatrix[matrixValue - x - 1], 0, matrixValue);
                 break;
         }
     }
@@ -118,8 +116,7 @@ public class ImageHandler {
     private int [][] cloneArr(int [][] arr){
         int[][] clone = new int[arr.length][arr.length];
         for(int i = 0; i < arr.length;i++)
-            for(int k = 0; k < arr.length;k++)
-                clone[i][k] = arr[i][k];
+            System.arraycopy(arr[i], 0, clone[i], 0, arr.length);
         return clone;
     }
 }
