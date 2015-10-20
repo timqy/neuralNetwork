@@ -20,11 +20,15 @@ public class Perceptron {
         if(args.length == 0)
             new CLI().run();
 
-        else if(args.length == 3) {
-            // launch automatic mode.
-        } else {
+        // Run in automatic mode
+        else if(args.length == 3)
+            new AutoRunner(args[0],args[1],args[2]).run();
+
+        //invalid arguments.
+        else {
             System.out.println("You need either 3 or 0 arguments" +
                     " to launch the program");
+
             System.exit(1);
         }
 
