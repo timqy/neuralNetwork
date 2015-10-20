@@ -49,7 +49,7 @@ public class ANN {
 
         for (int x = 0; x < IMG_SIZE; x++) {
             for (int y = 0; y < IMG_SIZE; y++) {
-                weights[x][y] = new Random().nextDouble();
+                weights[x][y] = 0;
             }
         }
     }
@@ -63,31 +63,19 @@ public class ANN {
             for (FileImage image : imgList) {
                 System.out.println("testing image : " + image.getName());
                 double error;
+                    double[][] imageData = image.getImgMatrix();
 
-                for(int i = 0; i < IMG_SIZE; i++ ) {
-                    for (int k = 0; k < IMG_SIZE; k++) {
-                        if (image.getImgMatrix()[i][k] > 9){
-                            image.getImgMatrix()[i][k] = 1;
-                        } else
-                        {
-                            image.getImgMatrix()[i][k] = 0;
-                        }
-                    }
-                }
-
-                do {
-                    int[][] imageData = image.getImgMatrix();
                     error = facitFiles.get(image.getName()) - activation(image);
 
                     // iterate through every weight/pixel
                     for (int j = 0; j < weights.length; j++) {
                         for (int k = 0; k < weights[0].length; k++) {
-                            double delta = LEARNING_RATE * error * imageData[j][k];
+                            double delta = LEARNING_RATE * error * (double)imageData[j][k];
                             weights[j][k] += delta;
+                            // System.out.println("Delta = "+LEARNING_RATE + " * "+error+" * "+(double)imageData[j][k]);
                         }
                     }
-                    System.out.println("show error : " + error  + " FACEIT " + facitFiles.get(image.getName()));
-                } while(Math.abs(error) == ERROR_THRESHOLD);
+                    //System.out.println("show error : " + error  + " FACEIT " + facitFiles.get(image.getName()));
             }
             noOfLoops--;
         }
@@ -113,7 +101,7 @@ public class ANN {
         // (ai)
         double weightSum = 0;
 
-        int[][] imageData = image.getImgMatrix();
+        double[][] imageData = image.getImgMatrix();
 
         // Calculate the activation function
         // Sum of each pixel times the weight in an image affects the result
@@ -140,6 +128,7 @@ public class ANN {
         } else if (weightSum <= 1.0) {
             return 4;
         } else {
+            System.out.println("Image not recognized, returning 0");
             return 0;
         }
     }

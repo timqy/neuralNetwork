@@ -15,9 +15,9 @@ public class ImageHandler {
      * @param imgMatrix the matrix to be analyzed
      * @return the value of the matrix
      */
-    private int matrixSum(ArrayList<Integer> imgMatrix){
+    private int matrixSum(ArrayList<Double> imgMatrix){
         int sum = 0;
-        for(int value : imgMatrix) {
+        for(double value : imgMatrix) {
             if(value >= 25)
                 sum += value;
         }
@@ -30,13 +30,13 @@ public class ImageHandler {
      * @param image the image to be rotated
      */
     public void RotateImageAnalyzer(FileImage image) {
-        int[][] imgMatrix = image.getImgMatrix();
+        double[][] imgMatrix = image.getImgMatrix();
         int value[] = new int[4];
         int divMax = 4;
         int matrixDivided = (imgMatrix.length / divMax) * 2;
 
         for (int divided = 0; divided < divMax; divided++) {
-            ArrayList<Integer> tempArr = new ArrayList<>();
+            ArrayList<Double> tempArr = new ArrayList<>();
 
             /** X low,high */
             int xHigh = matrixDivided * ((divided % 2) + 1);
@@ -66,7 +66,7 @@ public class ImageHandler {
      *
      *
      */
-    private int[][] RotateImage(int[][] imgMatrix, int value[]) {
+    private double[][] RotateImage(double[][] imgMatrix, int value[]) {
         int northHalf = value[0]+value[1];
         int westHalf = value[0]+value[2];
         int eastHalf = value[1]+value[3];
@@ -121,8 +121,8 @@ public class ImageHandler {
         return index;
     }
 
-    int[][] RotateMatrix(int[][] matrix, int rotateTimes) {
-        int[][] ret = new int[matrix.length][matrix.length];
+    double[][] RotateMatrix(double[][] matrix, int rotateTimes) {
+        double[][] ret = new double[matrix.length][matrix.length];
 
         for (int rotate = 1; rotate < rotateTimes; rotate++){
             /** 90 degrees */

@@ -13,14 +13,14 @@ public class FileImage {
     public static final int PIXEL_THRESHOLD = 8;
     private String name;
 
-    private int[][] imgMatrix;
+    private double[][] imgMatrix;
 
     /**
      * Creates a new FileImage and allocates a 20*20 2d array for
      * the pixels.
      */
     public FileImage() {
-        imgMatrix = new int[20][20];
+        imgMatrix = new double[20][20];
     }
 
     /**
@@ -56,11 +56,11 @@ public class FileImage {
      * Returns the 2d array (Image) of this Faceimage.
      * @return The image represented in a 2D array of integers.
      */
-    public int[][] getImgMatrix() {
+    public double[][] getImgMatrix() {
         return imgMatrix;
     }
 
-    public void setCurrentImage(int[][] imgMatrix){
+    public void setCurrentImage(double[][] imgMatrix){
         this.imgMatrix = imgMatrix;
     }
 
