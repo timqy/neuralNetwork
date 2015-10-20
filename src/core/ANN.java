@@ -19,6 +19,8 @@ public class ANN {
 
     public static final double LEARNING_RATE = 0.8;
     public static final int ERROR_THRESHOLD = 0;
+    public static final int IMG_SIZE = 20;
+
     private double[][] weights;
     private ArrayList<FileImage> imgList;
     private HashMap<String, Integer> facitFiles;
@@ -43,11 +45,11 @@ public class ANN {
     private void initANN() {
         Collections.shuffle(imgList, new Random(System.nanoTime()));
 
-        weights = new double[20][20];
+        weights = new double[IMG_SIZE][IMG_SIZE];
 
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                weights[i][j] = new Random().nextDouble();
+        for (int x = 0; x < IMG_SIZE; x++) {
+            for (int y = 0; y < IMG_SIZE; y++) {
+                weights[x][y] = new Random().nextDouble();
             }
         }
     }
@@ -62,8 +64,8 @@ public class ANN {
                 System.out.println("testing image : " + image.getName());
                 double error;
 
-                for(int i = 0; i < 20; i++ ) {
-                    for (int k = 0; k < 20; k++) {
+                for(int i = 0; i < IMG_SIZE; i++ ) {
+                    for (int k = 0; k < IMG_SIZE; k++) {
                         if (image.getImgMatrix()[i][k] > 9){
                             image.getImgMatrix()[i][k] = 1;
                         } else
@@ -162,7 +164,6 @@ public class ANN {
      * @param images An array of images to perform the test on.
      */
     public void classificationTest(ArrayList<FileImage> images) {
-        System.out.println("# - Happy, Sad, Mischievous or Mad - #");
         System.out.println("# Output: ");
         for (FileImage image : images) {
             System.out.format("%s %d\n", image.getName(), activation(image));
