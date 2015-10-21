@@ -55,9 +55,10 @@ public class AutoRunner {
 
         //Pray to god it works!
         //neuralNetwork.classificationTest(testData);
-        double correct = neuralNetwork.testPerformance(trainingData,testDataFacit);
 
-        System.out.println("Correct: "+correct+"%");
+        double correct = neuralNetwork.testPerformance(testData,testDataFacit);
+
+        System.out.println("Correct: " + correct + "%");
 
 
     }
