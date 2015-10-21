@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
+/**Autoruns the program and will print out the results on standard output in
+ * the format specified in the assignment.
  * @author dv13lan
  * @version 20 okt - 2015
  */
@@ -64,9 +65,11 @@ public class AutoRunner {
      * Will pre-process all images before use in the neural network.
      */
     private void prepareData() {
+        //Pre process the training data
         for(FileImage img : trainingData)
             img.preProcessImage();
 
+        //Pre process the test data.
         for(FileImage img : testData)
             img.preProcessImage();
     }
