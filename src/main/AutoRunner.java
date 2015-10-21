@@ -17,9 +17,11 @@ public class AutoRunner {
 
 
     public static final int TRAINING_LOOP = 1000;
+
     private ArrayList<FileImage> testData;
     private HashMap<String, Integer> facitData;
     private ArrayList<FileImage> trainingData;
+    private HashMap<String, Integer> testDataFacit;
 
     /**
      * Constructs a new Autorunner object.
@@ -35,6 +37,7 @@ public class AutoRunner {
             trainingData = ImageParser.getInstance().parseImage(trainingPath);
             facitData = ImageParser.getInstance().parseFacit(facitPath);
             testData = ImageParser.getInstance().parseImage(testFilePath);
+            testDataFacit = ImageParser.getInstance().parseFacit("resources/test-data-facit.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,12 +54,10 @@ public class AutoRunner {
         neuralNetwork.start(TRAINING_LOOP);
 
         //Pray to god it works!
-        neuralNetwork.classificationTest(testData);
-        //double correct = neuralNetwork.testPerformance(trainingData);
+        //neuralNetwork.classificationTest(testData);
+        double correct = neuralNetwork.testPerformance(trainingData,testDataFacit);
 
-        //neuralNetwork.testPerformance(testData);
-
-        //System.out.println("Correct: "+correct+"%");
+        System.out.println("Correct: "+correct+"%");
 
 
     }

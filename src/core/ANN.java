@@ -61,7 +61,6 @@ public class ANN {
     public void start(int noOfLoops) {
         while (noOfLoops >= 0) {
             for (FileImage image : imgList) {
-                System.out.println("testing image : " + image.getName());
                 double error;
                     double[][] imageData = image.getImgMatrix();
 
@@ -137,15 +136,15 @@ public class ANN {
      * Tests the performance of the neural network.
      * @return The percentage of correct answers as a double.
      */
-    public double testPerformance(ArrayList<FileImage> images) {
+    public double testPerformance(ArrayList<FileImage> images, HashMap<String, Integer> testDataFacit) {
         double correctAnswers = 0;
         // iterate through all images and count the correct answers
         for (FileImage image : images) {
-            if (activation(image) == facitFiles.get(image.getName())) {
+            if (activation(image) == testDataFacit.get(image.getName())) {
                 correctAnswers++;
             }
         }
-        return 100.0 * (correctAnswers / facitFiles.size());
+        return 100.0 * (correctAnswers / testDataFacit.size());
     }
 
     /**

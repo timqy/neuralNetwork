@@ -22,9 +22,12 @@ public class ANNTest {
     //Training loops
     public static final int NO_OF_LOOPS = 1;
     public static final double PASS_PERCENTAGE = 0.5;
+    public static final String RESOURCES_TEST_DATA_TXT = "resources/test-data.txt";
 
     private ANN neuralNetwork;
     private ArrayList<FileImage> images;
+    private ArrayList<FileImage> testImages;
+    private HashMap<String,Integer> testDataFacit;
 
     /**
      * Setups the tests. It will read the default training file and
@@ -38,6 +41,8 @@ public class ANNTest {
         HashMap<String, Integer> facit = parser.parseFacit(CLI.RESOURCES_TRAINING_FACIT_TXT);
 
         images = parser.parseImage(CLI.RESOURCES_TRAINING_TXT);
+        testImages = parser.parseImage(RESOURCES_TEST_DATA_TXT);
+        testDataFacit = parser.parseFacit("resources/test-data-facit.txt");
 
         ArrayList<FileImage> clone = new ArrayList<>();
         Collections.shuffle(images);
@@ -58,7 +63,7 @@ public class ANNTest {
     public void testTestPerformance() throws Exception {
         neuralNetwork.start(NO_OF_LOOPS);
 
-        double result = neuralNetwork.testPerformance(images);
+        double result = neuralNetwork.testPerformance(testImages, testDataFacit);
 
         assertTrue(result >= PASS_PERCENTAGE);
     }
