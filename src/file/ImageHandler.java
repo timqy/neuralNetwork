@@ -9,6 +9,54 @@ import java.util.ArrayList;
  */
 public class ImageHandler {
 
+    /** Northwest,northeast,southwest,southeast*/
+    int greatestCorner = 1;
+    /** North,east,south,west */
+    int greatestHalf = 1;
+
+    /**
+     * analyzes the image by converting the image into 
+     * four smaller ones, sums each image, calls rotate.
+     * @param image the image to be rotated
+     */
+    public void RotateImageAnalyzer(FileImage image) {
+        int mirrorimage = 0, rotations = 4;
+        while(greatestCorner != 0 && greatestHalf != 0) {
+            if(mirrorimage == rotations) {
+                image.setCurrentImage(mirrorMatrix(image.getImgMatrix()));
+                rotations--;
+                mirrorimage = 0;
+            }
+            double[][] imgMatrix = image.getImgMatrix();
+
+            int divMax = 4;
+            int value[] = new int[divMax];
+            int matrixDivided = (imgMatrix.length / (divMax / 2));
+
+            for (int divided = 0; divided < divMax; divided++) {
+                ArrayList<Double> tempArr = new ArrayList<>();
+
+                /** X low,high */
+                int xHigh = matrixDivided * ((divided % 2) + 1);
+                int xLow = matrixDivided * (divided % 2);
+                /** Y low,high */
+                int yHigh = (int) (matrixDivided * (Math.floor(divided / 2) + 1));
+                int yLow = (int) (Math.floor(divided / 2) * matrixDivided);
+
+                for (int x = xLow; x < xHigh; x++)
+                    for (int y = yLow; y < yHigh; y++)
+                        tempArr.add(imgMatrix[x][y]);
+
+                value[divided] = matrixSum(tempArr);
+            }
+
+            /**rotate the image accordingly */
+            image.setCurrentImage(RotateImage(imgMatrix, value));
+            mirrorimage++;
+        }
+    }
+
+
     /** MatrixSum
      *  sums the value's in the matrix
      *
@@ -24,41 +72,6 @@ public class ImageHandler {
         return sum;
     }
 
-    /**
-     * analyzes the image by converting the image into 
-     * four smaller ones, sums each image, calls rotate.
-     * @param image the image to be rotated
-     */
-    public void RotateImageAnalyzer(FileImage image) {
-        double[][] imgMatrix = image.getImgMatrix();
-        int value[] = new int[4];
-        int divMax = 4;
-        int matrixDivided = (imgMatrix.length / divMax) * 2;
-
-        for (int divided = 0; divided < divMax; divided++) {
-            ArrayList<Double> tempArr = new ArrayList<>();
-
-            /** X low,high */
-            int xHigh = matrixDivided * ((divided % 2) + 1);
-            int xLow = matrixDivided * (divided % 2);
-            /** Y low,high */
-            int yHigh = (int) (matrixDivided * (Math.floor(divided / 2) + 1));
-            int yLow = (int) (Math.floor(divided / 2) * matrixDivided);
-
-            for (int x = xLow; x < xHigh; x++)
-                for (int y = yLow; y < yHigh; y++)
-                    tempArr.add(imgMatrix[x][y]);
-
-            value[divided] = matrixSum(tempArr);
-        }
-
-
-        /**rotate the image accordingly */
-        image.setCurrentImage(RotateImage(imgMatrix, value));
-
-    }
-
-
     /** RotateImage
      * Rotates the image according to what quadrant of the 
      * image that has the highest value.
@@ -71,6 +84,12 @@ public class ImageHandler {
         int westHalf = value[0]+value[2];
         int eastHalf = value[1]+value[3];
         int southHalf = value[2]+value[3];
+
+        int[] halves = {northHalf,eastHalf,southHalf,westHalf};
+        System.out.println("north" + northHalf + "east " + eastHalf + "south " +southHalf + " west" +westHalf);
+        System.out.println("Values " + value[0] + " " + value[1] + " " +value[2]+ " " +value[3]);
+        greatestCorner = getIndexGreatestValue(value);
+        greatestHalf = getIndexGreatestValue(halves);
 
         switch (getIndexGreatestValue(value)) {
             case 0:
@@ -119,7 +138,17 @@ public class ImageHandler {
         return index;
     }
 
-    double[][] RotateMatrix(double[][] matrix, int rotateTimes) {
+    private double[][] mirrorMatrix(double[][] matrix) {
+        double [][] out = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                out[i][matrix.length - j - 1] = matrix[i][j];
+            }
+        }
+        return out;
+    }
+
+    private double[][] RotateMatrix(double[][] matrix, int rotateTimes) {
         double[][] ret = new double[matrix.length][matrix.length];
 
         for (int rotate = 1; rotate < rotateTimes; rotate++){
