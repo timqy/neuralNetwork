@@ -17,8 +17,7 @@ import java.util.Random;
  */
 public class ANN {
 
-    public static final double LEARNING_RATE = 0.8;
-    public static final int ERROR_THRESHOLD = 0;
+    public static final double LEARNING_RATE = 1.2;
     public static final int IMG_SIZE = 20;
 
     private double[][] weights;
@@ -49,7 +48,7 @@ public class ANN {
 
         for (int x = 0; x < IMG_SIZE; x++) {
             for (int y = 0; y < IMG_SIZE; y++) {
-                weights[x][y] = 0;
+                weights[x][y] = new Random().nextDouble();
             }
         }
     }
@@ -69,7 +68,7 @@ public class ANN {
                     // iterate through every weight/pixel
                     for (int j = 0; j < weights.length; j++) {
                         for (int k = 0; k < weights[0].length; k++) {
-                            double delta = LEARNING_RATE * error * (double)imageData[j][k];
+                            double delta = LEARNING_RATE * error * imageData[j][k];
                             weights[j][k] += delta;
                             // System.out.println("Delta = "+LEARNING_RATE + " * "+error+" * "+(double)imageData[j][k]);
                         }
