@@ -56,7 +56,7 @@ public class Gui {
 
                 for (int x = 0; x < f.getImgMatrix().length; x++) {
                     for (int y = 0; y < f.getImgMatrix().length; y++) {
-                        if (f.getImgMatrix()[x][y] == 1) {
+                        if (f.getImgMatrix()[x][y] >= 1) {
                             g.setColor(Color.black);
                         } else {
                             g.setColor(Color.WHITE);

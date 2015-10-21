@@ -64,7 +64,6 @@ public class ImageParser {
 
         ImageHandler ih = new ImageHandler();
         for(FileImage image : imgArr) {
-            System.out.print(image.getName() + " : ");
             ih.RotateImageAnalyzer(image);
         }
         return imgArr;
