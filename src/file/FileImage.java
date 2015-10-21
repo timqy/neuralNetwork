@@ -69,7 +69,6 @@ public class FileImage {
      * and easier processing.
      */
     public void preProcessImage() {
-
         for (int x = 0; x < imgMatrix.length; x++) {
             for (int y = 0; y < imgMatrix[0].length; y++) {
                 if(imgMatrix[x][y] > PIXEL_THRESHOLD)
@@ -89,30 +88,38 @@ public class FileImage {
     }
 
     /**
-     * Find out adjNodes
+     * Find out adjNodes in 8 corners.
+     *
      * @param x Coordinate in the X-axis
      * @param y Coordinate in the Y-axis
+     *
      * @return True if a another activated pixel has been
      * found in the vicinity of the pixel.
      */
     private boolean adjNodes(int x, int y) {
-        boolean foundAdjNode = false;
 
-        if(x - 1 != -1)
-            if(imgMatrix[x-1][y] == 1)
-                foundAdjNode = true;
-        if(x+1 < imgMatrix.length)
-            if(imgMatrix[x+1][y] == 1)
-                foundAdjNode = true;
+        for (int i = x-1; i <= x+1; i++)
+            for(int j = y-1; j <= y+1; j++ )
+                if(checkBoundries(i, j))
+                    return true;
 
-        if(y-1 != -1)
-            if(imgMatrix[x][y-1] == 1)
-                foundAdjNode = true;
+        return false;
+    }
 
-        if(y+1 < imgMatrix.length)
-            if(imgMatrix[x][y+1] == 1)
-                foundAdjNode = true;
+    /**
+     * Check the boundries of the array in 8 corners.
+     * @param x X coordinate
+     * @param y Y coordinate
+     *
+     * @return True if point is within the array and is not itself and
+     * the value is 1.
+     */
+    private boolean checkBoundries(int x, int y) {
 
-        return foundAdjNode;
+        return (
+                x >= 0 && x < imgMatrix.length &&
+                y >= 0 && y < imgMatrix[0].length &&
+                x != y && imgMatrix[x][y] == 1
+                );
     }
 }
