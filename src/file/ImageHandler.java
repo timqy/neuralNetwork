@@ -49,13 +49,17 @@ public class ImageHandler {
         switch (rotationOffset(sumNW,sumNE,sumSE,sumSW)) {
             case -1:
                 /** if two sides are the same */
-                if(sumNE == sumNW) {
+                if(sumNE == sumNW && sumNE + sumNW > 0) {
+                    System.out.println("Returning 0");
                     return 0;
-                } else if(sumNE == sumSE) {
+                } else if(sumNE == sumSE && sumNE + sumSE > 0) {
+                    System.out.println("Returning 1");
                     return 1;
-                } else if(sumSE == sumSW) {
+                } else if(sumSE == sumSW && sumSE + sumSW > 0) {
+                    System.out.println("Returning 2");
                     return 2;
-                } else if(sumSE == sumNW) {
+                } else if(sumSE == sumNW && sumSE + sumNE > 0) {
+                    System.out.println("Returning 2");
                     return 3;
                 }
             case 0:
@@ -120,7 +124,7 @@ public class ImageHandler {
         int index = 0;
         for (int i = 0; i < collection.length; i++) {
             if (collection[i] >= max) {
-                if(collection[i] == max){
+                if(collection[i] == max && max != 0){
                     return -1;
                 }
                 max = collection[i];
