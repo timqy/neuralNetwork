@@ -50,16 +50,12 @@ public class ImageHandler {
             case -1:
                 /** if two sides are the same */
                 if(sumNE == sumNW && sumNE + sumNW > 0) {
-                    System.out.println("Returning 0");
                     return 0;
                 } else if(sumNE == sumSE && sumNE + sumSE > 0) {
-                    System.out.println("Returning 1");
                     return 1;
                 } else if(sumSE == sumSW && sumSE + sumSW > 0) {
-                    System.out.println("Returning 2");
                     return 2;
                 } else if(sumSE == sumNW && sumSE + sumNE > 0) {
-                    System.out.println("Returning 2");
                     return 3;
                 }
             case 0:
@@ -149,7 +145,6 @@ public class ImageHandler {
 
     private double[][] split(double[][] image, int startX, int startY, int endX, int endY) {
         double[][] subArray = new double[startX+endX][startY+endY];
-        System.out.println("size of subarray: x:"+subArray.length+" y: "+subArray[0].length);
 
         int xCounter = 0;
         int yCounter = 0;
