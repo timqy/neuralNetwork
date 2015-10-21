@@ -95,12 +95,25 @@ public class ANN {
      * @return the value
      */
     private int activation(FileImage image) {
-        // i : the image that we want to calculate the activation function for
-        // (ai)
+
+        double weightSum = calculateWeights(image.getImgMatrix());
+
+        if (weightSum < .25) {
+            return 1;
+        } else if (weightSum < .5) {
+            return 2;
+        } else if (weightSum < .75) {
+            return 3;
+        } else if (weightSum <= 1.0) {
+            return 4;
+        } else {
+            System.out.println("Image not recognized, returning 0");
+            return 0;
+        }
+    }
+
+    private double calculateWeights(double[][] imageData) {
         double weightSum = 0;
-
-        double[][] imageData = image.getImgMatrix();
-
         // Calculate the activation function
         // Sum of each pixel times the weight in an image affects the result
         // iterate through all rows and columns
@@ -116,19 +129,7 @@ public class ANN {
 
         // Sigmoid function
         weightSum = 1 / (1 + Math.exp(-weightSum));
-
-        if (weightSum < .25) {
-            return 1;
-        } else if (weightSum < .5) {
-            return 2;
-        } else if (weightSum < .75) {
-            return 3;
-        } else if (weightSum <= 1.0) {
-            return 4;
-        } else {
-            System.out.println("Image not recognized, returning 0");
-            return 0;
-        }
+        return weightSum;
     }
 
     /**
