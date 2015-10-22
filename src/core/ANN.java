@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class ANN {
 
-    public static final double LEARNING_RATE = 1.2;
+    public static final double LEARNING_RATE = 0.5;
     public static final int IMG_SIZE = 20;
 
     private double[][] weights;

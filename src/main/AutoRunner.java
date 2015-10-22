@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class AutoRunner {
 
 
-    public static final int TRAINING_LOOP = 100;
+    public static final int TRAINING_LOOP = 500;
 
     private ArrayList<FileImage> testData;
     private HashMap<String, Integer> facitData;
