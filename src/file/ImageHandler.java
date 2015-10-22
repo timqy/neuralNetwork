@@ -188,7 +188,6 @@ public class ImageHandler {
      */
     private double[][] split(double[][] image, int startX, int startY, int endX, int endY) {
         double[][] subArray = new double[startX+endX][startY+endY];
-        System.out.println("size of subarray: x:"+subArray.length+" y: "+subArray[0].length);
 
         int xCounter = 0;
         int yCounter = 0;

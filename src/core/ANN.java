@@ -60,19 +60,17 @@ public class ANN {
         while (noOfLoops >= 0) {
             for (FileImage image : imgList) {
                 double error;
-                    double[][] imageData = image.getImgMatrix();
+                double[][] imageData = image.getImgMatrix();
 
-                    error = facitFiles.get(image.getName()) - activation(image);
+                error = facitFiles.get(image.getName()) - activation(image);
 
-                    // iterate through every weight/pixel
-                    for (int j = 0; j < weights.length; j++) {
-                        for (int k = 0; k < weights[0].length; k++) {
-                            double delta = learningRate * error * imageData[j][k];
-                            weights[j][k] += delta;
-                            // System.out.println("Delta = "+LEARNING_RATE + " * "+error+" * "+(double)imageData[j][k]);
-                        }
+                // iterate through every weight/pixel
+                for (int j = 0; j < weights.length; j++) {
+                    for (int k = 0; k < weights[0].length; k++) {
+                        double delta = learningRate * error * imageData[j][k];
+                        weights[j][k] += delta;
                     }
-                    //System.out.println("show error : " + error  + " FACEIT " + facitFiles.get(image.getName()));
+                }
             }
             noOfLoops--;
         }
@@ -106,7 +104,6 @@ public class ANN {
         } else if (weightSum <= 1.0) {
             return 4;
         } else {
-            System.out.println("Image not recognized, returning 0");
             return 0;
         }
     }

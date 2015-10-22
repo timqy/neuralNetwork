@@ -2,7 +2,6 @@ package main;
 
 import core.ANN;
 import file.FileImage;
-import file.ImageHandler;
 import file.ImageParser;
 import gui.Gui;
 
@@ -184,12 +183,7 @@ public class CLI {
             e.printStackTrace();
         }
 
-        //for(FileImage face : fileImages){
-          //  imageHandler.RotateImageAnalyzer(face.getImgMatrix());
-        //}
-
         System.out.println("Loaded default fileImages path, "+ fileImages.size() +" entities loaded!");
-
     }
 
     /**

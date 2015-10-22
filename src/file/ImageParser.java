@@ -87,9 +87,7 @@ public class ImageParser {
 
                 if(tokens.length == 2) {
                     facitMap.put(tokens[0], Integer.parseInt(tokens[1]));
-                    // System.out.println("Inserted: Key: "+tokens[0] + " value: "+tokens[1]);
                 }
-
             }
         }
         return facitMap;

@@ -1,5 +1,6 @@
-package file;
+package test;
 
+import file.ImageParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -21,7 +21,6 @@ public class AutoRunner {
     private ArrayList<FileImage> testData;
     private HashMap<String, Integer> facitData;
     private ArrayList<FileImage> trainingData;
-    private HashMap<String, Integer> testDataFacit;
 
     /**
      * Constructs a new Autorunner object.
@@ -37,7 +36,6 @@ public class AutoRunner {
             trainingData = ImageParser.getInstance().parseImage(trainingPath);
             facitData = ImageParser.getInstance().parseFacit(facitPath);
             testData = ImageParser.getInstance().parseImage(testFilePath);
-            testDataFacit = ImageParser.getInstance().parseFacit("resources/test-data-facit.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }

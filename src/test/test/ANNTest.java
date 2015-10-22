@@ -1,5 +1,6 @@
-package core;
+package test;
 
+import core.ANN;
 import file.FileImage;
 import file.ImageParser;
 import main.CLI;
@@ -23,12 +24,9 @@ public class ANNTest {
     public static final int NO_OF_LOOPS = 1;
     private final double LEARNING_RATE = 0.5;
     public static final double PASS_PERCENTAGE = 0.5;
-    public static final String RESOURCES_TEST_DATA_TXT = "resources/test-data.txt";
 
     private ANN neuralNetwork;
     private ArrayList<FileImage> images;
-    private ArrayList<FileImage> testImages;
-    private HashMap<String,Integer> testDataFacit;
 
     /**
      * Setups the tests. It will read the default training file and
@@ -42,8 +40,6 @@ public class ANNTest {
         HashMap<String, Integer> facit = parser.parseFacit(CLI.RESOURCES_TRAINING_FACIT_TXT);
 
         images = parser.parseImage(CLI.RESOURCES_TRAINING_TXT);
-        testImages = parser.parseImage(RESOURCES_TEST_DATA_TXT);
-        testDataFacit = parser.parseFacit("resources/test-data-facit.txt");
         ArrayList<FileImage> clone = new ArrayList<>();
         Collections.shuffle(images);
 
@@ -95,7 +91,7 @@ public class ANNTest {
                 neuralNetwork.start(learningRate,loops);
 
                 //System.out.printf(" learningRate : %.1f | loops : %2d | result : %.0f\n",learningRate,loops,neuralNetwork.testPerformance(10000));
-                System.out.printf("%d %.1f\n",loops,neuralNetwork.testPerformance(10000));
+                System.out.printf("%d %.1f\n",loops,neuralNetwork.testPerformance(100));
                 try {
                     setUp();
                 } catch (Exception e) {

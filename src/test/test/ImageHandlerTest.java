@@ -1,5 +1,8 @@
-package file;
+package test;
 
+import file.FileImage;
+import file.ImageHandler;
+import file.ImageParser;
 import main.CLI;
 import org.junit.After;
 import org.junit.Before;
