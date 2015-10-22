@@ -13,20 +13,24 @@ public class ImageHandler {
      * @param image the image to be rotated
      */
     public void RotateImageAnalyzer(FileImage image) {
-        double[][] newImg = image.getImgMatrix();
+        int noOfRotations;
+        do {
+            double[][] newImg = image.getImgMatrix();
 
-        int noOfRotations = analyzeRotation(newImg);
-        if(noOfRotations == -1) {
-            newImg = mirrorX(newImg);
-        } else if(noOfRotations == -2) {
-            newImg = mirrorY(newImg);
-        } else {
-            for(int i = 0; i < noOfRotations; i++) {
-                newImg = rotateImage(newImg);
+            noOfRotations = analyzeRotation(newImg);
+            System.out.println("no of rotations = " + noOfRotations);
+            if (noOfRotations == -1) {
+                newImg = mirrorX(newImg);
+            } else if (noOfRotations == -2) {
+                newImg = mirrorY(newImg);
+            } else {
+                for (int i = 0; i < noOfRotations; i++) {
+                    newImg = rotateImage(newImg);
+                }
             }
-        }
 
-        image.setCurrentImage(newImg);
+            image.setCurrentImage(newImg);
+        }while(noOfRotations != 10);
     }
 
     private int analyzeRotation(double[][] newImg) {
@@ -41,11 +45,15 @@ public class ImageHandler {
         int sumSE = matrixSum(northEast);
         int sumSW = matrixSum(southEast);
 
+
+
+        System.out.println("rotation offeset : " + rotationOffset(sumNW,sumNE,sumSE,sumSW));
+        System.out.println("sumNW " + sumNW + " sumNe " + sumNE + " sumsw " + sumSW + " sumse " + sumSE);
         switch (rotationOffset(sumNW,sumNE,sumSE,sumSW)) {
             case -1:
                 /** if two sides are the same */
                 if(sumNE == sumNW && sumNE + sumNW > 0) {
-                    return 0;
+                    return 10;
                 } else if(sumNE == sumSE && sumNE + sumSE > 0) {
                     return 1;
                 } else if(sumSE == sumSW && sumSE + sumSW > 0) {
@@ -55,7 +63,7 @@ public class ImageHandler {
                 }
             case 0:
                 /** Should not rotate */
-                return 0;
+                return 10;
             case 1:
                 /** if north half has the most value, it's already upright */
                 if(sumNE + sumNW > sumNE + sumSE){
