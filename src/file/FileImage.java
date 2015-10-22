@@ -80,11 +80,14 @@ public class FileImage {
 
         for (int i = 0; i < imgMatrix.length; i++) {
             for (int j = 0; j < imgMatrix[0].length; j++) {
-                if(!adjNodes(i,j)) {
-                    imgMatrix[i][j] = 0;
+                if(imgMatrix[i][j] != 0) {
+                    if (!adjNodes(i, j)) {
+                        imgMatrix[i][j] = 0;
+                    }
                 }
             }
         }
+
     }
 
     /**
@@ -97,29 +100,16 @@ public class FileImage {
      * found in the vicinity of the pixel.
      */
     private boolean adjNodes(int x, int y) {
-
         for (int i = x-1; i <= x+1; i++)
             for(int j = y-1; j <= y+1; j++ )
-                if(checkBoundries(i, j))
-                    return true;
+                if(i >= 0 && i < imgMatrix.length) // i is within boundaries
+                    if( j >= 0 && j < imgMatrix[0].length)// j is within boundaries
+                        if(i != x || j != y )
+                            if(imgMatrix[i][j] == 1)
+                                return true;
+
+
 
         return false;
-    }
-
-    /**
-     * Check the boundries of the array in 8 corners.
-     * @param x X coordinate
-     * @param y Y coordinate
-     *
-     * @return True if point is within the array and is not itself and
-     * the value is 1.
-     */
-    private boolean checkBoundries(int x, int y) {
-
-        return (
-                x >= 0 && x < imgMatrix.length &&
-                y >= 0 && y < imgMatrix[0].length &&
-                x != y && imgMatrix[x][y] == 1
-                );
     }
 }

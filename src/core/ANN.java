@@ -17,7 +17,6 @@ import java.util.Random;
  */
 public class ANN {
 
-    public static final double LEARNING_RATE = 0.5;
     public static final int IMG_SIZE = 20;
 
     private double[][] weights;
@@ -57,7 +56,7 @@ public class ANN {
      *
      * @param noOfLoops The number of loops it will train.
      */
-    public void start(int noOfLoops) {
+    public void start(double learningRate,int noOfLoops) {
         while (noOfLoops >= 0) {
             for (FileImage image : imgList) {
                 double error;
@@ -68,7 +67,7 @@ public class ANN {
                     // iterate through every weight/pixel
                     for (int j = 0; j < weights.length; j++) {
                         for (int k = 0; k < weights[0].length; k++) {
-                            double delta = LEARNING_RATE * error * imageData[j][k];
+                            double delta = learningRate * error * imageData[j][k];
                             weights[j][k] += delta;
                             // System.out.println("Delta = "+LEARNING_RATE + " * "+error+" * "+(double)imageData[j][k]);
                         }
@@ -136,19 +135,24 @@ public class ANN {
      * Tests the performance of the neural network.
      * @return The percentage of correct answers as a double.
      */
-    public double testPerformance(ArrayList<FileImage> images, HashMap<String, Integer> testDataFacit) {
+    public double testPerformance(int numberOfTests) {
         double correctAnswers = 0;
+
         // iterate through all images and count the correct answers
-        for (FileImage image : images) {
-            if (activation(image) == testDataFacit.get(image.getName())) {
+        Collections.shuffle(imgList,new Random(System.nanoTime()));
+
+        for(int i = 0; i < numberOfTests;i++){
+            int imgIndex = new Random().nextInt(imgList.size());
+
+            if (activation(imgList.get(imgIndex)) == facitFiles.get(imgList.get(imgIndex).getName())) {
                 correctAnswers++;
             }
         }
-        return 100.0 * (correctAnswers / testDataFacit.size());
+        return 100.0 * (correctAnswers / numberOfTests);
     }
 
     /**
-     * Runs a clasification test on a set of images.
+     * Runs a classification test on a set of images.
      * @param images An array of images to perform the test on.
      */
     public void classificationTest(ArrayList<FileImage> images) {

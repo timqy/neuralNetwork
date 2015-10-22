@@ -21,6 +21,7 @@ public class ANNTest {
 
     //Training loops
     public static final int NO_OF_LOOPS = 1;
+    private final double LEARNING_RATE = 0.5;
     public static final double PASS_PERCENTAGE = 0.5;
     public static final String RESOURCES_TEST_DATA_TXT = "resources/test-data.txt";
 
@@ -43,9 +44,12 @@ public class ANNTest {
         images = parser.parseImage(CLI.RESOURCES_TRAINING_TXT);
         testImages = parser.parseImage(RESOURCES_TEST_DATA_TXT);
         testDataFacit = parser.parseFacit("resources/test-data-facit.txt");
-
         ArrayList<FileImage> clone = new ArrayList<>();
         Collections.shuffle(images);
+
+        //Pre process the training data
+        for(FileImage img : images)
+            img.preProcessImage();
 
         for(int i = 0; i < 100;i++)
             clone.add(images.get(i));
@@ -61,9 +65,9 @@ public class ANNTest {
      */
     @Test
     public void testTestPerformance() throws Exception {
-        neuralNetwork.start(NO_OF_LOOPS);
+        neuralNetwork.start(LEARNING_RATE,NO_OF_LOOPS);
 
-        double result = neuralNetwork.testPerformance(testImages, testDataFacit);
+        double result = neuralNetwork.testPerformance(100);
 
         assertTrue(result >= PASS_PERCENTAGE);
     }
@@ -74,7 +78,35 @@ public class ANNTest {
      */
     @Test
     public void testClassificationTest() throws Exception {
-        neuralNetwork.start(NO_OF_LOOPS);
+        neuralNetwork.start(LEARNING_RATE,NO_OF_LOOPS);
         neuralNetwork.classificationTest(images);
     }
+
+
+    /**
+     * Automatic training value evaluation.
+     *
+     */
+    @Test
+    public void testTrainingValue(){
+        for(double learningRate = 0.1; learningRate < 2; learningRate += 0.2){
+            System.out.println("learnin RAte : " +learningRate);
+            for(int loops = 1; loops < 101; loops+=1){
+                neuralNetwork.start(learningRate,loops);
+
+                //System.out.printf(" learningRate : %.1f | loops : %2d | result : %.0f\n",learningRate,loops,neuralNetwork.testPerformance(10000));
+                System.out.printf("%d %.1f\n",loops,neuralNetwork.testPerformance(10000));
+                try {
+                    setUp();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
+
+    }
+
 }

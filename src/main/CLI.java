@@ -26,8 +26,6 @@ public class CLI {
     private ImageParser parser;
     private HashMap<String, Integer> facitMap;
     private ArrayList<FileImage> fileImages;
-    private ImageHandler imageHandler;
-
 
     private Scanner scanner;
 
@@ -38,7 +36,6 @@ public class CLI {
     public CLI() {
         facitMap = new HashMap<>();
         fileImages = new ArrayList<>();
-        imageHandler = new ImageHandler();
 
         scanner = new Scanner(System.in);
         parser = ImageParser.getInstance();
@@ -99,7 +96,6 @@ public class CLI {
                         }
                     }
                     break;
-
                 case "train":
                     startTraining(argv);
                     break;
@@ -119,9 +115,9 @@ public class CLI {
      * @param argv An Array containing the arguments to the training.
      */
     private void startTraining(String[] argv) {
-        if(argv.length == 2) {
+        if(argv.length == 3) {
             ANN trainer = new ANN(fileImages, facitMap);
-            trainer.start(Integer.parseInt(argv[1]));
+            trainer.start(Double.parseDouble(argv[1]),Integer.parseInt(argv[2]));
         }
     }
 

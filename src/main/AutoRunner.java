@@ -15,8 +15,8 @@ import java.util.HashMap;
  */
 public class AutoRunner {
 
-
-    public static final int TRAINING_LOOP = 500;
+    private final double LEARNING_RATE = 0.5;
+    private final int TRAINING_LOOP = 14;
 
     private ArrayList<FileImage> testData;
     private HashMap<String, Integer> facitData;
@@ -51,12 +51,12 @@ public class AutoRunner {
         ANN neuralNetwork = new ANN(trainingData,facitData);
 
         //Train train train
-        neuralNetwork.start(TRAINING_LOOP);
+        neuralNetwork.start(LEARNING_RATE,TRAINING_LOOP);
 
         //Pray to god it works!
         //neuralNetwork.classificationTest(testData);
 
-        double correct = neuralNetwork.testPerformance(testData,testDataFacit);
+        double correct = neuralNetwork.testPerformance(3000000);
 
         System.out.println("Correct: " + correct + "%");
 
