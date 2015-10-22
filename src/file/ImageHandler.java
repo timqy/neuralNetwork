@@ -16,7 +16,7 @@ public class ImageHandler {
         double[][] newImg = image.getImgMatrix();
 
         int noOfRotations = analyzeRotation(newImg);
-
+        System.out.println("no of rotations = " + noOfRotations);
         if(noOfRotations == -1) {
             newImg = mirrorX(newImg);
         } else if(noOfRotations == -2) {
@@ -114,20 +114,24 @@ public class ImageHandler {
     }
 
     private int rotationOffset(int sumNW, int sumNE, int sumSE, int sumSW) {
-        int[] collection = {sumNW,sumNE,sumSW,sumSE};
+        int[] collection = {sumNW,sumNE,sumSE,sumSW};
 
         int max = 0;
         int index = 0;
         for (int i = 0; i < collection.length; i++) {
-            if (collection[i] >= max) {
-                if(collection[i] == max && max != 0){
-                    return -1;
-                }
+            if (collection[i] > max) {
                 max = collection[i];
                 index = i;
-
             }
         }
+
+        for (int i = 0; i < collection.length; i++) {
+            if (i != index && collection[i] == max) {
+                return -1;
+            }
+        }
+
+
         return index;
     }
 

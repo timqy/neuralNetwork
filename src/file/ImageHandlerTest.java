@@ -17,7 +17,7 @@ public class ImageHandlerTest {
     public void setUp() throws Exception {
         ip = ImageParser.getInstance();
         ih = new ImageHandler();
-        fileImage = ip.parseImage(CLI.RESOURCES_TRAINING_TXT).get(4);
+        fileImage = ip.parseImage(CLI.RESOURCES_TRAINING_TXT).get(5);
         image = fileImage.getImgMatrix();
     }
 
