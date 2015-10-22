@@ -177,9 +177,9 @@ public class ImageHandler {
     }
 
     /**
-     * Slices an array given a set of start and end coordinates.
+     * Slices an array given a set of train and end coordinates.
      * @param image Array to be sliced.
-     * @param startX start x value to begin slicing from.
+     * @param startX train x value to begin slicing from.
      * @param startY Starting y value to begin slicing from.
      * @param endX End x coordinate to slice to.
      * @param endY End y coordinate to slice to.

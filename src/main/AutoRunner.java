@@ -49,14 +49,10 @@ public class AutoRunner {
         ANN neuralNetwork = new ANN(trainingData,facitData);
 
         //Train train train
-        neuralNetwork.start(LEARNING_RATE,TRAINING_LOOP);
+        neuralNetwork.train(LEARNING_RATE, TRAINING_LOOP);
 
         //Pray to god it works!
-        //neuralNetwork.classificationTest(testData);
-
-        double correct = neuralNetwork.testPerformance(3000000);
-
-        System.out.println("Correct: " + correct + "%");
+        neuralNetwork.runTest(testData);
 
 
     }

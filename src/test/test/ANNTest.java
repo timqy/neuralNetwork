@@ -61,7 +61,7 @@ public class ANNTest {
      */
     @Test
     public void testTestPerformance() throws Exception {
-        neuralNetwork.start(LEARNING_RATE,NO_OF_LOOPS);
+        neuralNetwork.train(LEARNING_RATE, NO_OF_LOOPS);
 
         double result = neuralNetwork.testPerformance(100);
 
@@ -74,8 +74,8 @@ public class ANNTest {
      */
     @Test
     public void testClassificationTest() throws Exception {
-        neuralNetwork.start(LEARNING_RATE,NO_OF_LOOPS);
-        neuralNetwork.classificationTest(images);
+        neuralNetwork.train(LEARNING_RATE, NO_OF_LOOPS);
+        neuralNetwork.runTest(images);
     }
 
 
@@ -88,7 +88,7 @@ public class ANNTest {
         for(double learningRate = 0.1; learningRate < 2; learningRate += 0.2){
             System.out.println("learnin RAte : " +learningRate);
             for(int loops = 1; loops < 101; loops+=1){
-                neuralNetwork.start(learningRate,loops);
+                neuralNetwork.train(learningRate, loops);
 
                 //System.out.printf(" learningRate : %.1f | loops : %2d | result : %.0f\n",learningRate,loops,neuralNetwork.testPerformance(10000));
                 System.out.printf("%d %.1f\n",loops,neuralNetwork.testPerformance(100));

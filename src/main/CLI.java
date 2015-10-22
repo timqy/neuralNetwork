@@ -116,7 +116,7 @@ public class CLI {
     private void startTraining(String[] argv) {
         if(argv.length == 3) {
             ANN trainer = new ANN(fileImages, facitMap);
-            trainer.start(Double.parseDouble(argv[1]),Integer.parseInt(argv[2]));
+            trainer.train(Double.parseDouble(argv[1]), Integer.parseInt(argv[2]));
         }
     }
 

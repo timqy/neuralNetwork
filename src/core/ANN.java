@@ -56,7 +56,7 @@ public class ANN {
      *
      * @param noOfLoops The number of loops it will train.
      */
-    public void start(double learningRate,int noOfLoops) {
+    public void train(double learningRate, int noOfLoops) {
         while (noOfLoops >= 0) {
             for (FileImage image : imgList) {
                 double error;
@@ -152,7 +152,7 @@ public class ANN {
      * Runs a classification test on a set of images.
      * @param images An array of images to perform the test on.
      */
-    public void classificationTest(ArrayList<FileImage> images) {
+    public void runTest(ArrayList<FileImage> images) {
         System.out.println("# Output: ");
         for (FileImage image : images) {
             System.out.format("%s %d\n", image.getName(), activation(image));
