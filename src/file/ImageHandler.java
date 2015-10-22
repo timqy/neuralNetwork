@@ -16,7 +16,6 @@ public class ImageHandler {
         double[][] newImg = image.getImgMatrix();
 
         int noOfRotations = analyzeRotation(newImg);
-        System.out.println("no of rotations = " + noOfRotations);
         if(noOfRotations == -1) {
             newImg = mirrorX(newImg);
         } else if(noOfRotations == -2) {
@@ -42,10 +41,6 @@ public class ImageHandler {
         int sumSE = matrixSum(northEast);
         int sumSW = matrixSum(southEast);
 
-
-
-        System.out.println("rotation offeset : " + rotationOffset(sumNW,sumNE,sumSE,sumSW));
-        System.out.println("sumNW " + sumNW + " sumNe " + sumNE + " sumsw " + sumSW + " sumse " + sumSE);
         switch (rotationOffset(sumNW,sumNE,sumSE,sumSW)) {
             case -1:
                 /** if two sides are the same */
