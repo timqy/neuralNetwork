@@ -1,9 +1,10 @@
 package file;
 
 /**
- * Created by dv13thg on 10/13/15.
+ * @author dv13lan, dv13thg
+ * @version 2015-10-22
  *
- * rotates the image so it faces upwards.
+ * This class handles the rotation of images.
  */
 public class ImageHandler {
 
@@ -13,25 +14,32 @@ public class ImageHandler {
      * @param image the image to be rotated
      */
     public void RotateImageAnalyzer(FileImage image) {
-        int noOfRotations;
-        do {
-            double[][] newImg = image.getImgMatrix();
+        double[][] newImg = image.getImgMatrix();
 
-            noOfRotations = analyzeRotation(newImg);
-            if (noOfRotations == -1) {
-                newImg = mirrorX(newImg);
-            } else if (noOfRotations == -2) {
-                newImg = mirrorY(newImg);
-            } else {
-                for (int i = 0; i < noOfRotations; i++) {
-                    newImg = rotateImage(newImg);
-                }
+        int noOfRotations = analyzeRotation(newImg);
+
+        if(noOfRotations == -1) {
+            newImg = mirrorX(newImg);
+        } else if(noOfRotations == -2) {
+            newImg = mirrorY(newImg);
+        } else {
+            for(int i = 0; i < noOfRotations; i++) {
+                newImg = rotateImage(newImg);
             }
+        }
 
-            image.setCurrentImage(newImg);
-        }while(noOfRotations != 10);
+        image.setCurrentImage(newImg);
     }
 
+    /**
+     * Splices the 2d array into 4 sub arrays, sums each sub array up and
+     * returns the number of rotations needed to get a correctly rotated image.
+     *
+     * @param newImg 2D array to be sliced
+     *
+     * @return An integer representing the number of 90 degree
+     * rotations.
+     */
     private int analyzeRotation(double[][] newImg) {
 
         double[][] northWest = split(newImg,0,0,10,10); // North west
@@ -44,25 +52,21 @@ public class ImageHandler {
         int sumSE = matrixSum(northEast);
         int sumSW = matrixSum(southEast);
 
-
-
-        //System.out.println("rotation offeset : " + rotationOffset(sumNW,sumNE,sumSE,sumSW));
-        //System.out.println("sumNW " + sumNW + " sumNe " + sumNE + " sumsw " + sumSW + " sumse " + sumSE);
         switch (rotationOffset(sumNW,sumNE,sumSE,sumSW)) {
             case -1:
                 /** if two sides are the same */
-                if(sumNE == sumNW && sumNE + sumNW > 0) {
-                    return 10;
-                } else if(sumNE == sumSE && sumNE + sumSE > 0) {
+                if(sumNE == sumNW) {
+                    return 0;
+                } else if(sumNE == sumSE) {
                     return 1;
-                } else if(sumSE == sumSW && sumSE + sumSW > 0) {
+                } else if(sumSE == sumSW) {
                     return 2;
-                } else if(sumSE == sumNW && sumSE + sumNE > 0) {
+                } else if(sumSE == sumNW) {
                     return 3;
                 }
             case 0:
                 /** Should not rotate */
-                return 10;
+                return 0;
             case 1:
                 /** if north half has the most value, it's already upright */
                 if(sumNE + sumNW > sumNE + sumSE){
@@ -94,6 +98,12 @@ public class ImageHandler {
         return 0;
     }
 
+    /**
+     * Mirrors the image horizontally.
+     * @param matrix 2D array to mirror.
+     *
+     * @return the new mirrored 2d image.
+     */
     private double[][] mirrorX(double[][] matrix) {
         double [][] out = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
@@ -104,7 +114,11 @@ public class ImageHandler {
         return out;
     }
 
-
+    /**
+     * Mirrors the image vertically (Y axis).
+     * @param matrix 2D array to mirror.
+     * @return the new mirrored 2d image.
+     */
     private double[][] mirrorY(double[][] matrix) {
         double [][] out = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
@@ -115,28 +129,41 @@ public class ImageHandler {
         return out;
     }
 
+    /**
+     * Calculates the rotation offset from the 4 subarrays
+     * @param sumNW 2D sub array of northwest corner.
+     * @param sumNE 2D sub array of northeast corner.
+     * @param sumSE 2D sub array of southeast corner.
+     * @param sumSW 2D sub array of southwest corner.
+     *
+     * @return An integer representing the sub array of the
+     * corner with most active pixels.
+     */
     private int rotationOffset(int sumNW, int sumNE, int sumSE, int sumSW) {
-        int[] collection = {sumNW,sumNE,sumSE,sumSW};
+        int[] collection = {sumNW,sumNE,sumSW,sumSE};
 
         int max = 0;
         int index = 0;
         for (int i = 0; i < collection.length; i++) {
-            if (collection[i] > max) {
+            if (collection[i] >= max) {
+                if(collection[i] == max){
+                    return -1;
+                }
                 max = collection[i];
                 index = i;
+
             }
         }
-
-        for (int i = 0; i < collection.length; i++) {
-            if (i != index && collection[i] == max) {
-                return -1;
-            }
-        }
-
-
         return index;
     }
 
+    /**
+     * Sums all the values in an array and returns an int representing the
+     * number of active pixels in that array.
+     *
+     * @param array a 2D array image.
+     * @return An integer representing the number of active pixels.
+     */
     private int matrixSum(double[][] array){
         int sum = 0;
         for (int x = 0; x < array.length; x++) {
@@ -149,8 +176,19 @@ public class ImageHandler {
         return sum;
     }
 
+    /**
+     * Slices an array given a set of start and end coordinates.
+     * @param image Array to be sliced.
+     * @param startX start x value to begin slicing from.
+     * @param startY Starting y value to begin slicing from.
+     * @param endX End x coordinate to slice to.
+     * @param endY End y coordinate to slice to.
+     *
+     * @return A sub array containing a part of the original array.
+     */
     private double[][] split(double[][] image, int startX, int startY, int endX, int endY) {
         double[][] subArray = new double[startX+endX][startY+endY];
+        System.out.println("size of subarray: x:"+subArray.length+" y: "+subArray[0].length);
 
         int xCounter = 0;
         int yCounter = 0;
@@ -167,6 +205,11 @@ public class ImageHandler {
         return subArray;
     }
 
+    /**
+     * Rotates the image 90 degrees.
+     * @param image Image to be rotated.
+     * @return A new rotated 2D array.
+     */
     private double[][] rotateImage(double[][] image) {
         double[][] ret = new double[20][20];
 
