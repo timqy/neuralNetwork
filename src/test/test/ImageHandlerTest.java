@@ -31,19 +31,7 @@ public class ImageHandlerTest {
 
     @Test
     public void testRotateImageAnalyzer() throws Exception {
-        printImage();
-
         ih.RotateImageAnalyzer(fileImage);
         image = fileImage.getImgMatrix();
-        printImage();
-    }
-
-    private void printImage(){
-        for(int x = 0; x < image.length;x++) {
-            for (int y = 0; y < image[0].length; y++)
-                System.out.printf("%3d  ", (int)image[x][y]);
-            System.out.println();
-        }
-        System.out.printf("\n");
     }
 }

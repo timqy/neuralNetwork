@@ -64,9 +64,7 @@ public class ANNTest {
     @Test
     public void testTestPerformance() throws Exception {
         neuralNetwork.train(LEARNING_RATE, NO_OF_LOOPS);
-
         double result = neuralNetwork.performance(100);
-
         assertTrue(result >= PASS_PERCENTAGE);
     }
 
@@ -79,30 +77,6 @@ public class ANNTest {
     public void testClassificationTest() throws Exception {
         neuralNetwork.train(LEARNING_RATE, NO_OF_LOOPS);
         neuralNetwork.runTest(images);
-    }
-
-
-    /**
-     * Automatic training value evaluation.
-     */
-    @Test
-    public void testTrainingValue() {
-        for (double learningRate = 0.1; learningRate < 2; learningRate += 0.2) {
-            System.out.println("learnin RAte : " + learningRate);
-            for (int loops = 1; loops < 101; loops += 1) {
-                neuralNetwork.train(learningRate, loops);
-
-                System.out.printf("%d %.1f\n", loops,
-                        neuralNetwork.performance(100));
-                try {
-                    setUp();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-
     }
 
 }
