@@ -1,4 +1,4 @@
-package test;
+package test.test;
 
 import core.ANN;
 import file.FileImage;
@@ -21,9 +21,9 @@ import static org.junit.Assert.assertTrue;
 public class ANNTest {
 
     //Training loops
-    public static final int NO_OF_LOOPS = 1;
+    private static final int NO_OF_LOOPS = 1;
     private final double LEARNING_RATE = 0.5;
-    public static final double PASS_PERCENTAGE = 0.5;
+    private static final double PASS_PERCENTAGE = 0.5;
 
     private ANN neuralNetwork;
     private ArrayList<FileImage> images;

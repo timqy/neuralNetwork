@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class ANN {
 
-    public static final int IMG_SIZE = 20;
+    private static final int IMG_SIZE = 20;
 
     private double[][] weights;
     private ArrayList<FileImage> imgList;
@@ -53,8 +53,10 @@ public class ANN {
     }
 
     /**
-     *
+     * Trains the neural network with a set learning rate for a specific number of
+     * times.
      * @param noOfLoops The number of loops it will train.
+     * @param learningRate The specified learning rate for the network.
      */
     public void train(double learningRate, int noOfLoops) {
         while (noOfLoops >= 0) {
@@ -108,18 +110,20 @@ public class ANN {
         }
     }
 
+    /**
+     * Calculates the weights
+     * @param imageData 2D image array to calculate weights from.
+     * @return An double representing the total sum of all the weights.
+     */
     private double calculateWeights(double[][] imageData) {
         double weightSum = 0;
-        // Calculate the activation function
-        // Sum of each pixel times the weight in an image affects the result
-        // iterate through all rows and columns
+
         for (int j = 0; j < imageData.length; j++) {
             for (int k = 0; k < imageData[0].length; k++) {
                 weightSum += imageData[j][k] * weights[j][k];
             }
         }
 
-        // Normalize x
         weightSum = weightSum / (imageData.length * imageData[0].length);
         weightSum = (weightSum * 6) - 3;
 
@@ -134,10 +138,7 @@ public class ANN {
      */
     public double testPerformance(int numberOfTests) {
         double correctAnswers = 0;
-
-        // iterate through all images and count the correct answers
         Collections.shuffle(imgList,new Random(System.nanoTime()));
-
         for(int i = 0; i < numberOfTests;i++){
             int imgIndex = new Random().nextInt(imgList.size());
 

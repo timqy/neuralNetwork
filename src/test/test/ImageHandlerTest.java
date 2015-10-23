@@ -1,4 +1,4 @@
-package test;
+package test.test;
 
 import file.FileImage;
 import file.ImageHandler;
@@ -10,10 +10,10 @@ import org.junit.Test;
 
 public class ImageHandlerTest {
 
-    ImageHandler ih;
-    ImageParser ip;
-    FileImage fileImage;
-    double[][] image;
+    private ImageHandler ih;
+    private ImageParser ip;
+    private FileImage fileImage;
+    private double[][] image;
 
 
     @Before
