@@ -1,0 +1,12 @@
+test/test/ANNTest.class
+file/ImageParser.class
+core/ANN.class
+file/FileImage.class
+main/AutoRunner.class
+main/CLI.class
+test/test/ImageParserTest.class
+gui/Gui.class
+file/ImageHandler.class
+gui/Gui$1.class
+main/Perceptron.class
+test/test/ImageHandlerTest.class

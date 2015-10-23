@@ -1,0 +1,479 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{minitoc}
+\graphicspath{ {images/} }
+\usepackage{svg}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{rotating}
+\usepackage{pdfpages}
+\usepackage{tikz}
+
+\pgfplotstableset{% global config, for example in the preamble
+  every head row/.style={before row=\toprule,after row=\midrule},
+  every last row/.style={after row=\bottomrule},
+  fixed,precision=2,
+}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-4pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+% Include pdf with multiple pages ex \includepdf[pages=-, nup=2x2]{filename.pdf}
+\usepackage[final]{pdfpages}
+% Place figures where they should be
+\usepackage{float}
+
+% Float for text
+\floatstyle{ruled}
+\newfloat{xml}{H}{lop}
+\floatname{xml}{XML}
+
+% vars
+\def\title{Neural Network}
+\def\preTitle{Laboration 5}
+\def\kurs{AI, HT-15}
+
+\def\namn{Ludwig Andersson}
+\def\mail{dv13lan@cs.umu.se}
+
+\def\namnn{Tim Hedberg}
+\def\maill{dv13thg@cs.umu.se}
+
+\def\inst{datavetenskap}
+\def\dokumentTyp{Laborationsrapport}
+
+\begin{document}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \begin{small}
+    \begin{tabular}{@{}p{\textwidth}@{}}
+      UMEÅ UNIVERSITET \hfill \today \\
+      Institutionen för \inst \\
+      \dokumentTyp \\
+    \end{tabular}
+  \end{small}
+  \vspace{10mm}
+  \begin{center}
+    \LARGE{\preTitle} \\
+    \huge{\textbf{\kurs}} \\
+    \vspace{10mm}
+    \LARGE{\title} \\
+    \vspace{15mm}
+    \begin{large}
+        \namn, \mail \\
+        \namnn, \maill \\
+    \end{large}
+    \vfill
+  \end{center}
+\end{titlepage}
+
+\newpage
+\mbox{}
+\vspace{70mm}
+\begin{center}
+% Dedication goes here
+\end{center}
+\thispagestyle{empty}
+\newpage
+
+\pagestyle{fancy}
+\rhead{\today}
+\lhead{\title}
+\chead{}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+\cleardoublepage
+\newpage
+\dosecttoc 
+\tableofcontents
+\cleardoublepage
+
+\rfoot{\thepage}
+\pagenumbering{arabic}
+
+\section*{Introduction}
+In this report we will go over the implementation of a machine learning system based on a Perceptron with a neural network as learning mechanism.
+
+This report will go over the solution, the implementation some important algorithms that is vital to the solution. A system description with details for image processing, image rotation, image parsing and the learning abilities of the neural network and how it performs during different parameter values for the learning rate as well the number of training loops. 
+
+The reader will also be given a brief introduction to the Maven framework and will learn how to compile and execute the project.
+
+\section*{Prerequisites}
+Before we can start compiling and running the assignment solution a few tools and programs is needed. The examples in the listings throughout the report will assume that you are running a UNIX environment and/or could be different on other platforms.
+
+\subsection*{JRE and Java compiler}
+Since this is a Java project you will need the Java compiler, \verb|javac| and a JRE(Java Runtime Environment). To see if you have java and javac installed on your machine you can run the following commands:
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Javac and JRE]
+$ javac -version
+javac 1.8.0_60
+
+$ java -vesion
+openjdk version "1.8.0_60"
+OpenJDK Runtime Environment (build 1.8.0_60-b24)
+OpenJDK 64-Bit Server VM (build 25.60-b23, mixed mode)
+
+\end{lstlisting}
+If you receieve an error saying that the command is not found then Java or Javac may not be installed on your system.
+
+\subsection*{Maven}
+To be able to smoothly build the project and have automatic dependency handling of the projects source code the Maven framework is used. Maven can compile, test and package the solution easily. Later in this report you can find out how to build and run this solution.
+
+To check if you have maven installed you can run this command:
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Maven]
+$ mvn -v
+Apache Maven 3.3.3
+Maven home: /opt/maven
+Java version: 1.8.0_60, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-8-openjdk/jre
+Default locale: en_US, platform encoding: UTF-8
+\end{lstlisting}
+
+
+\clearpage\section{Assignment}
+Our assignment is to implement a perceptron with a neural network. The perceptron will guess the emotional states of image inputs (represented as a 20x20 2D array). The perceptron must be able to learn a set of images and will then be tested on a set of new images and it must score above 65 percent correct guesses.
+
+The assignment could be divided into three parts
+\begin{itemize}
+\item Parse the images
+\item The Neural Network
+\item Output format
+\end{itemize}
+
+Another demand was to read the image training files in their specific format and output them in a specific format. This added some demands on the parser as the input test data looks like this (Example shortened for report): 
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Sample images]
+# - Happy, Sad, Mischievous or Mad - #
+# Training data (300 images)
+# Correct classifications can be found in training-facit.txt
+# http://www8.cs.umu.se/kurser/5DV121/HT12/
+
+Image1
+0 3 3 3 3 0 1 0 
+4 1 9 0 0 0 0 0 
+0 7 0 0 0 6 1 2 
+0 8 31 5 0 0 0
+
+Image2
+0 3 3 5 3 0 1 0 
+4 1 9 6 0 4 0 0 
+0 7 0 0 0 6 1 2 
+0 8 31 5 0 12 0
+\end{lstlisting}
+\clearpage
+The corresponding answer file is formated like this:
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Answers example]
+# - Happy, Sad, Mischievous or Mad - #
+# Correct answers for training data (training.txt)
+# See http://www8.cs.umu.se/kurser/5DV121/HT12
+Image1 2
+Image2 1
+Image3 4
+Image4 4
+\end{lstlisting}
+The output from the Perceptron program will have the same formatted output as the answers file when launched in automatic mode.
+
+\clearpage\section{Compile and run}
+\subsection{Running Perceptron}
+The solution contains two modes of the execution of the Perceptron program. We have a Command line interface(CLI) which is used mainly for debugging of images. It allows you to load images and answers into memory and a feature to show the pixels in a GUI.
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Launch in CLI Mode]
+$ java -jar Perceptron-1.0.jar
+\end{lstlisting}
+
+The other running mode is the automatic mode where you specify three arguments to the program, the training data, the answers to the training data and the test data which you don't supply the answers for.
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Launch in Automatic mode]
+$ java -jar Perceptron-1.0.jar "traindata" "answers" "testdata"
+\end{lstlisting}
+
+\subsection{Compiling}
+The solution can be compiled in the terminal by using Maven by using
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Maven Compile]
+$ mvn compile
+\end{lstlisting}
+
+
+
+If you would like to package the solution into a runnable JAR file you can use this command
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Maven Package]
+$ mvn package
+\end{lstlisting}
+Then the runnable .JAR file can be found in the target folder and be executed as described in the section above.
+
+Maven ensures that all the dependencies for the project are solved automatically so we dont need to worry about manually handling the dependencies and libraries for the project.
+
+If needed it is possible to clean the project in order to remove all the compiled classes and the runnable .JAR file. the command to clean a Maven project is:
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Maven Clean]
+$ mvn clean
+\end{lstlisting}
+
+In the directory specified by the assignment specification there is a script
+called \verb|compile.sh|. It will retrieve the latest version of the project
+from github, compile it using Maven and create a jar called \verb|Faces.jar|.
+ This install script will automaticly clean up the folders after generating
+ the jar.
+
+ \begin{lstlisting}[label=cd-example, caption=Compiler Script]
+ $ sh compile.sh
+ \end{lstlisting}
+
+
+\section{System Description}
+The system has two different starting modes to choose from, one is a CLI (Command Line Interface) which was used under development for mostly debugging purposes, the other mode is the Automatic mode where no user interaction is needed.
+
+For more information and implementation details please go ahead to view our \verb|Javadoc| at \verb|http://www8.cs.umu.se/~dv13lan/ai/|. It will give a brief overview on how packages and classes are sorted as well of documentation of methods and classes.
+\subsection{Imageparser}
+The \verb|ImageParser| is responsible for loading the image files and the answers file into the program. The images will be read into an Array with the type of \verb|FileImage| through the method \verb|parseImages()|. This method takes a file name as parameter.
+
+The answers are loaded into an hashtable with a \verb|String| as the key and an \verb|Integer| as value. This makes it important to have unique names for each image.
+
+
+
+The \verb|ImageParser| will filter out any lines that begins with a \verb|'#'| character and will treat them as a comment in the file and should therefore be ignored by the parser. This is true for both the answers file and the image file.
+
+\clearpage\subsection{Image Handler}
+The \verb|ImageHandler| responsibility is to analyze if an image needs to be rotated. This is done by slicing the large 2D array image into four sub arrays of the image. In each sub array the \verb|ImageHandler| will summarize all the pixels that are over a certain value to find out where the "eyes" are of the face. After that is done the image will be rotated so that the "eyes" will always be at the top of the array and the mouth at the south. This makes it easier for the neural network to output more correct guesses of the emotional class of the image.
+
+This was however one of the hardest part to implement of the system since it was confusing and we had little experience in working and manipulating 2D array in this advanced manners. We had to look up some tips and tricks of rotating and mirroring of 2D arrays on the internet to be able to get a satisfying solution.
+\subsection{CLI}
+The CLI or Command Line Interface in this solution has been used for debugging and development purposes in the project. It has the functionality to display images in a GUI as well load images and answers with the \verb|ImageParser|. It looks like a command prompt and can take some commands with arguments such as loading custom image files and showing images regarding to their index.
+
+\subsection{Autorunner}
+The Autorunner takes three arguments, a training image file, the answers to the training images and some test images. The \verb|Perceptron| will then train X number of times with a learning rate and then output it guesses formatted as the assignment demanded.
+
+The number of times it will train is set by a constant in the \verb|AutoRunner| class and the learning rate of the neural network is also set by a constant in the \verb|ANN| class.
+
+Depending on how you set the two variables and the number of correct guesses can vary. By default the settings are optimized for 250 training images and then tested on 50 unknown images.
+
+\subsection{Neural Network}
+The neural network is implemented in the \verb|ANN.java| class. It is responsibility is handling and training of the neural network. To construct a neural network you need to send in the training data and the answers as parameters to the constructor. The constructor will then handle the initiation of weights and shuffling of values.
+
+The initiation of the weights values is done by randomizing a float value between 0 and 1 using the \verb|Random| object provided by Java. This randomization is random and good enough for this assignment.
+
+After the initiation of the neural network the user is free to train the network with a specified learning rate and with a and for a specified number of times. By adjusting these values you will get different behavior and the ability to learn.
+
+To start to train the network the method \verb|train( learningRate,loops )| is used, The learning rate and the number of training loops have huge impact on how the neural network will perform later when doing the classification test.
+
+To run the classification test you need to call the \verb|runTests(images)| method to try test the perceptron on a new set of images which you don't provide the answers for. The output will be as demanded by the specification and any extra information will be preceded by \verb|#|.
+
+The neural network consists of 200 nodes, one node for each pixel, each node will then have a weight that is initiated with a random float value between 0 and 1. These 200 nodes can generate one out of four outputs depending on the total weight between the nodes. Depending on the weight/activity generated in the network when received an image as input we can then return either sad, happy, mischievous or mad as an emotional classification.
+
+\clearpage\section{Algorithms}
+\subsection{Learning algorithm}
+The learning algorithm for the neural network is a central and important part of the solution of this assignment. As mentioned earlier the assignment needed to score at least 65 percent correct on a set of 100 untrained images. The neural network uses a set of weights which will tell you how much activation the nerual network will output given a image. And by analyzing this output you can make a more accurate guess on what type of classification the image has.
+
+The trick to make the perceptron as accurate as possible is to provide it with as similar data as possible, as we cannot control the content of the images we could however adjust the rotation of them, by having all the images rotated in the same orientation the neural network will be more accurate.
+
+Another important aspect of the learning algorithm is which learning rate you have, if set to low the weights may not be able to adjust enough to get good output or set to high it will constantly over adjust the weights.
+\begin{enumerate}
+\item Shuffle the training data
+\item while x $>$ 0
+	\begin{enumerate}
+	\item For each training image
+      \begin{enumerate}
+	  \item Calculate the error
+      \item For each pixel and weight calculate a new weight
+      \end{enumerate}
+	\end{enumerate}
+\item x = x - 1
+\end{enumerate}
+
+The formula to calculate the weights:
+\belowcaptionskip=-10px
+\begin{lstlisting}[label=cd-example, caption=Delta Calculation]
+delta = LEARNING_RATE * error * PV;
+\end{lstlisting}
+
+
+\clearpage\subsection{Image rotation}
+Image rotation algorithm.
+  \begin{enumerate}
+  \item Convert the image into four chunks, a 2x2 matrix.
+  \item Calculate the sum of each chunk.
+  \item Get the value of each side of the image by adding  two chunks together.
+  			(North side, East side, South side, west side)
+  \item Get the chunk with the greatest value
+  \item check which side connected to it has the greatest value.
+  \item The image is rotated upright by rotating the highest value chunk to the beginning of the array.
+  \end{enumerate}
+
+
+\subsection{Image reading}
+The image reading algorithm.
+  \begin{enumerate}
+  \item While not end of file
+    \begin{enumerate}
+    \item while the line starts with a integer read the line
+      \begin{enumerate}
+      \item Split the text at white space. 
+      		From the split you receive a row of the image.
+      \item add the row to a matrix
+      \end{enumerate}
+    \item save the matrix ( containing the image ).
+    \end{enumerate}
+  \end{enumerate}
+  
+\clearpage\subsection{Image Preprocesing}
+The preprocessing image has two parts, the first part where we convert the image to black/white with no gray scale at all. The second part is where we find lonely pixels and replace them with a white one.
+
+\verb|Convert to black/white|:
+\begin{enumerate}
+\item For each pixel in the image
+	\begin{enumerate}
+	\item If pixel value $<$ THRESHOLD; set it to 0
+    \item If pixel value $>$ THRESHOLD; set it to 1
+	\end{enumerate}
+\end{enumerate}
+
+\verb|Remove Jiitter|:
+\begin{enumerate}
+\item For each pixel in the image
+	\begin{enumerate}
+	\item If pixel has no neighbors that is black pixels
+    	\begin{enumerate}
+        	\item turn current pixel value to 0
+        \end{enumerate}
+	\end{enumerate}
+\end{enumerate}
+
+\clearpage\section{Performance}
+In the final stages of this project some performance testing of the neural network was done to make sure we had the right parameters for the learning rate and the number of training loops. A series of testing was done on the learning rates between 0.1 to 2.0 with the incremental rate of 0.2 between tests and with the loops between 1 to 100 with an incremental rate of 1. To get the optimal parameters for this we are looking for a graph where the fluctuation is minimal and we reach a stable 100 percent result as quickly as possible.
+\subsection{Performance Graphs}
+
+\textbf{}
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 0.1},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph01.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With a learning rate of 0.1 the performace reaches 100 already with around 20 loops of training, it runs stable at 100 percent after around 35 loops.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 0.3},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph03.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With 0.3 as learning rate it can be observed an similar behavior as the with the 0.1 learning rate but with a higher amount of fluctuation but fewer occurrences in the percentage of correct answers.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 0.5},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph05.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With the learning rate of 0.5 we get only a minimal amount of fluctuation and we reach a stable result of 100 percent quite quickly. This learning rate could work to get great results.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 0.7},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph07.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With a learning rate of 0.7 we get the same behavior as with the learning rate of 0.5, the difference here though is that we get is that the minor fluctuation is this case has more impact on the result percentage.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 0.9},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph09.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With a learning rate of 0.9 we get a very stable behavior of the perceptron and the neural network.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 1.1},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph11.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With a learning rate of 1.1 it starts we can observa some drop in the results along the number of loops. This can be because of a to high learning rate can lead to over compensation of the weights when learning.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 1.3},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph13.txt};
+  \end{axis}
+\end{tikzpicture}
+
+With the learning rate of 1.3 we can see that the fluctuation is much worse than before and this you can clearly notice that the training led to bad weights values in the learning process.
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 1.5},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph15.txt};
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 1.7},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph17.txt};
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[ title={Learning rate 1.9},
+      xlabel={$Training loops$},
+      ylabel={$Result(\%)$}]
+    \addplot[blue] table{Data/graph19.txt};
+  \end{axis}
+\end{tikzpicture}
+
+By analyzing these graphs we can see that a well balanced form of learning rate needs to be found to get a good learning ability within the neural network. However these tests are not 100 percent accurate due to the initiation of random weights in the neural network as this can affect the learning ability. The training images are shuffled and as well the test images which we get the result percentage from.
+
+With a high learning rate we get irregular random behavior from the neural network which cannot be predicted as with a lower learning rate a larger amount of loops is needed to adjust the weights enough.
+
+\subsection{Image processing}
+We also found out that pre-processing the images did increase the performance results with as much as 10-20 percent. The pre-processing makes the image more alike and therefore its easier for the neural network to recognize the image and make correct guess. This together with making all images having the same orientation makes the neural network perform much better and generate a higher percentage in correct guesses.
+
+\section{Discussion}
+\subsection{General feedback on the assignment}
+The assignment was interesting and at some points quite difficult. The implementation of the neural network was a bit hard to understand from the specification and it took some time to understand what you actually needed to do to make it function properly.
+
+However it was a new interesting subject and has given some basic insight of how neural networks works and how they can be used to achieve machine learning abilities within programs. We believe that having knowledge about neural networks and machine learning and how they work and how to implement them gives you a great tool to be able to write interesting and powerful software in the future.
+
+As it took some time to implement and other courses as well took time the error handling of this solution is not very good and could be extended further. We assume that all data that is given as input to the program will be correctly formatted and follows the guidelines and if not the behavior is undefined.
+
+The parsing part/implementation where you read in the images and answers from a file could have been given, this would allow more time to be spent on the actual neural network and a more advanced report instead.
+
+We think that we achieved good results and that the system works very well. The implementation was done in Java which we had some previous experience with.
+
+The image pre-processing and rotation of the images makes a great performance boost to the performance of the neural network which makes it possible to score as well as it does.
+
+\includepdf[pages=-]{Code/Gui.pdf}
+\end{document}
