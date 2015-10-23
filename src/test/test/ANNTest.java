@@ -68,15 +68,4 @@ public class ANNTest {
         assertTrue(result >= PASS_PERCENTAGE);
     }
 
-    /**
-     * Runs the test for classification for the images.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testClassificationTest() throws Exception {
-        neuralNetwork.train(LEARNING_RATE, NO_OF_LOOPS);
-        neuralNetwork.runTest(images);
-    }
-
 }
