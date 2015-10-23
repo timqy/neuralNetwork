@@ -14,8 +14,8 @@ import java.util.Scanner;
 /**
  * @author dv13lan
  * @version 2015-10-13
- *
- * A basic commandline interface for the perception robot.
+ *          <p/>
+ *          A basic commandline interface for the perception robot.
  */
 public class CLI {
 
@@ -111,10 +111,11 @@ public class CLI {
 
     /**
      * Starts the trainer. Will reset the neural network
+     *
      * @param argv An Array containing the arguments to the training.
      */
     private void startTraining(String[] argv) {
-        if(argv.length == 3) {
+        if (argv.length == 3) {
             ANN trainer = new ANN(fileImages, facitMap);
             trainer.train(Double.parseDouble(argv[1]), Integer.parseInt(argv[2]));
         }
@@ -122,6 +123,7 @@ public class CLI {
 
     /**
      * Shows an image from the training files.
+     *
      * @param imgIndex Index of image to show.
      */
     private void showImage(int imgIndex) {
@@ -135,8 +137,8 @@ public class CLI {
      * how many noads that are loaded and how many answers that are loaded in.
      */
     private void status() {
-        System.out.println("There is "+ fileImages.size() +" nodes loaded.");
-        System.out.println("There is "+facitMap.size() +" facit entries loaded");
+        System.out.println("There is " + fileImages.size() + " nodes loaded.");
+        System.out.println("There is " + facitMap.size() + " facit entries loaded");
     }
 
     /**
@@ -147,27 +149,28 @@ public class CLI {
         try {
             facitMap = parser.parseFacit(RESOURCES_TRAINING_FACIT_TXT);
         } catch (FileNotFoundException ff) {
-            System.err.println("Could not load file "+RESOURCES_TRAINING_FACIT_TXT);
+            System.err.println("Could not load file " + RESOURCES_TRAINING_FACIT_TXT);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Loaded default faceit path, "+facitMap.size() +" entities loaded!");
+        System.out.println("Loaded default faceit path, " + facitMap.size() + " entities loaded!");
     }
 
     /**
      * Loads a facit file from a path.
+     *
      * @param filePath A string representing the facit file path.
      */
     private void loadfacit(String filePath) {
-        try{
+        try {
             facitMap = parser.parseFacit(filePath);
         } catch (FileNotFoundException ff) {
-            System.err.println("Could not load file "+filePath);
+            System.err.println("Could not load file " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded faceit path, "+facitMap.size() +" entities loaded!");
+        System.out.println("Loaded faceit path, " + facitMap.size() + " entities loaded!");
     }
 
     /**
@@ -178,16 +181,18 @@ public class CLI {
             fileImages = parser.parseImage(RESOURCES_TRAINING_TXT);
             startImagePreProcessor();
         } catch (FileNotFoundException ff) {
-            System.err.println("Could not load file "+RESOURCES_TRAINING_TXT);
+            System.err.println("Could not load file " + RESOURCES_TRAINING_TXT);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded default fileImages path, "+ fileImages.size() +" entities loaded!");
+        System.out.println("Loaded default fileImages path, "
+                + fileImages.size() + " entities loaded!");
     }
 
     /**
      * Overloaded method to use a custom filepath.
+     *
      * @param filePath A path to the imagefile.
      */
     private void loadimages(String filePath) {
@@ -195,16 +200,17 @@ public class CLI {
             fileImages = parser.parseImage(filePath);
             startImagePreProcessor();
         } catch (FileNotFoundException ff) {
-            System.err.println("Could not load file "+filePath);
+            System.err.println("Could not load file " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded fileImages path, "+ fileImages.size() +" entities loaded!");
+        System.out.println("Loaded fileImages path, " + fileImages.size()
+                + " entities loaded!");
     }
 
     private void startImagePreProcessor() {
-        for(FileImage image : fileImages) {
+        for (FileImage image : fileImages) {
             image.preProcessImage();
         }
     }

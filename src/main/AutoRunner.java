@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**Autoruns the program and will print out the results on standard output in
+/**
+ * Autoruns the program and will print out the results on standard output in
  * the format specified in the assignment.
+ *
  * @author dv13lan
  * @version 20 okt - 2015
  */
@@ -27,7 +29,7 @@ public class AutoRunner {
      *
      * @param trainingPath A string representing the file path to the training
      *                     file.
-     * @param facitPath A string representing the file path to the facit file.
+     * @param facitPath    A string representing the file path to the facit file.
      * @param testFilePath A string representing the file path to the test
      *                     images that are not included in the training file.
      */
@@ -46,7 +48,7 @@ public class AutoRunner {
      */
     public void run() {
         prepareData();
-        ANN neuralNetwork = new ANN(trainingData,facitData);
+        ANN neuralNetwork = new ANN(trainingData, facitData);
 
         //Train train train
         neuralNetwork.train(LEARNING_RATE, TRAINING_LOOP);
@@ -62,11 +64,11 @@ public class AutoRunner {
      */
     private void prepareData() {
         //Pre process the training data
-        for(FileImage img : trainingData)
+        for (FileImage img : trainingData)
             img.preProcessImage();
 
         //Pre process the test data.
-        for(FileImage img : testData)
+        for (FileImage img : testData)
             img.preProcessImage();
     }
 }

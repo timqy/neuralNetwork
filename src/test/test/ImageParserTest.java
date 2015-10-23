@@ -30,7 +30,8 @@ public class ImageParserTest {
 
     @Test
     public void testParseFacit() throws Exception {
-        HashMap<String, Integer> map = parser.parseFacit("resources/training-facit.txt");
+        HashMap<String, Integer> map =
+                parser.parseFacit("resources/training-facit.txt");
         assertEquals(map.size(), 300);
     }
 }

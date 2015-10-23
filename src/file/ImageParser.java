@@ -32,7 +32,9 @@ public class ImageParser {
      * @throws IOException
      * @throws NumberFormatException
      */
-    public ArrayList<FileImage> parseImage(String filePath) throws IOException, NumberFormatException {
+    public ArrayList<FileImage> parseImage(String filePath) throws IOException,
+            NumberFormatException {
+
         ArrayList<FileImage> imgArr = new ArrayList<>();
         FileImage FileImage = new FileImage();
         int lineNumber = 0;
@@ -42,7 +44,9 @@ public class ImageParser {
 
         while((line = bufferedreader.readLine()) != null) {
             if (line.startsWith("#") || line.trim().length() == 0) {
-                if(FileImage.getName() != null && FileImage.getImgMatrix().length == 20){
+                if(FileImage.getName() != null &&
+                        FileImage.getImgMatrix().length == 20){
+
                     imgArr.add(FileImage);
                     FileImage = new FileImage();
                 }
@@ -50,7 +54,8 @@ public class ImageParser {
                 if (line.matches("^[0-9 ]+$")) {
                     String[] ArrNumbers = line.split(" ");
                     for (int i = 0; i < ArrNumbers.length; i++) {
-                        FileImage.setImgMatrix(i,lineNumber, Integer.parseInt(ArrNumbers[i]));
+                        FileImage.setImgMatrix(i,lineNumber,
+                                Integer.parseInt(ArrNumbers[i]));
                     }
                     lineNumber++;
                 } else {

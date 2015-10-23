@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * The ANN (A Neural Network) represents our neural network, contains methods to train it,
- * verify its performance and test it on new images. An associated test for this class
- * can be found and its called ANNTest.
+ * The ANN (A Neural Network) represents our neural network,
+ * contains methods to train it, verify its performance and test it on new
+ * images.
+ *
+ * An associated test for this class can be found and its called ANNTest.
  *
  * @author dv13lan, dv13thg
  * @version 20 okt - 2015
@@ -136,13 +138,14 @@ public class ANN {
      * Tests the performance of the neural network.
      * @return The percentage of correct answers as a double.
      */
-    public double testPerformance(int numberOfTests) {
+    public double performance(int numberOfTests) {
         double correctAnswers = 0;
         Collections.shuffle(imgList,new Random(System.nanoTime()));
         for(int i = 0; i < numberOfTests;i++){
             int imgIndex = new Random().nextInt(imgList.size());
 
-            if (activation(imgList.get(imgIndex)) == facitFiles.get(imgList.get(imgIndex).getName())) {
+            if (activation(imgList.get(imgIndex)) ==
+                    facitFiles.get(imgList.get(imgIndex).getName())) {
                 correctAnswers++;
             }
         }
